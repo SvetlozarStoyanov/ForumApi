@@ -9,6 +9,7 @@ namespace Database.Entities.Subforum
         public string Name { get; set; }
         public DateTime CreatedOn { get; set; }
         public ICollection<ApplicationUser> Users { get; set; }
+        public ICollection<ApplicationUser> Administrators { get; set; }
         public ICollection<Post> Posts { get; set; }
     }
 }

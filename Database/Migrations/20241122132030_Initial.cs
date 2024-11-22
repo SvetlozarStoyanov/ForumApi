@@ -27,6 +27,19 @@ namespace Database.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SeedEntities",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SeededOn = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SeedEntities", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Subforums",
                 columns: table => new
                 {
@@ -67,6 +80,7 @@ namespace Database.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     SubforumId = table.Column<long>(type: "bigint", nullable: true),
+                    SubforumId1 = table.Column<long>(type: "bigint", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -88,6 +102,11 @@ namespace Database.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetUsers_Subforums_SubforumId",
                         column: x => x.SubforumId,
+                        principalTable: "Subforums",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_Subforums_SubforumId1",
+                        column: x => x.SubforumId1,
                         principalTable: "Subforums",
                         principalColumn: "Id");
                 });
@@ -186,15 +205,16 @@ namespace Database.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AuthorId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     SubforumId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Posts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Posts_AspNetUsers_AuthorId",
-                        column: x => x.AuthorId,
+                        name: "FK_Posts_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -213,6 +233,7 @@ namespace Database.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PostId = table.Column<long>(type: "bigint", nullable: false)
                 },
@@ -268,6 +289,7 @@ namespace Database.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Text = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CommentId = table.Column<long>(type: "bigint", nullable: false)
                 },
@@ -294,10 +316,11 @@ namespace Database.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    PostId = table.Column<long>(type: "bigint", nullable: false),
                     CommentId = table.Column<long>(type: "bigint", nullable: false),
-                    Type = table.Column<int>(type: "int", nullable: false)
+                    Type = table.Column<int>(type: "int", nullable: false),
+                    CommentReplyId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -308,6 +331,11 @@ namespace Database.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CommentVotes_CommentReplies_CommentReplyId",
+                        column: x => x.CommentReplyId,
+                        principalTable: "CommentReplies",
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_CommentVotes_Comments_CommentId",
                         column: x => x.CommentId,
@@ -354,6 +382,11 @@ namespace Database.Migrations
                 column: "SubforumId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_SubforumId1",
+                table: "AspNetUsers",
+                column: "SubforumId1");
+
+            migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
                 table: "AspNetUsers",
                 column: "NormalizedUserName",
@@ -386,19 +419,24 @@ namespace Database.Migrations
                 column: "CommentId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CommentVotes_CommentReplyId",
+                table: "CommentVotes",
+                column: "CommentReplyId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CommentVotes_UserId",
                 table: "CommentVotes",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Posts_AuthorId",
-                table: "Posts",
-                column: "AuthorId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Posts_SubforumId",
                 table: "Posts",
                 column: "SubforumId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Posts_UserId",
+                table: "Posts",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_PostVotes_PostId",
@@ -430,16 +468,19 @@ namespace Database.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "CommentReplies");
-
-            migrationBuilder.DropTable(
                 name: "CommentVotes");
 
             migrationBuilder.DropTable(
                 name: "PostVotes");
 
             migrationBuilder.DropTable(
+                name: "SeedEntities");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "CommentReplies");
 
             migrationBuilder.DropTable(
                 name: "Comments");

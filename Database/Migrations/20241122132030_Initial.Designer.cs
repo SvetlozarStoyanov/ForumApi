@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Database.Migrations
 {
     [DbContext(typeof(ForumDbContext))]
-    [Migration("20241120163949_Initial")]
+    [Migration("20241122132030_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -38,6 +38,10 @@ namespace Database.Migrations
 
                     b.Property<long>("PostId")
                         .HasColumnType("bigint");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -69,6 +73,10 @@ namespace Database.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Text")
                         .IsRequired()
@@ -135,6 +143,9 @@ namespace Database.Migrations
                     b.Property<long?>("SubforumId")
                         .HasColumnType("bigint");
 
+                    b.Property<long?>("SubforumId1")
+                        .HasColumnType("bigint");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -154,6 +165,8 @@ namespace Database.Migrations
 
                     b.HasIndex("SubforumId");
 
+                    b.HasIndex("SubforumId1");
+
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
@@ -165,12 +178,12 @@ namespace Database.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("AuthorId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long?>("SubforumId")
                         .HasColumnType("bigint");
@@ -183,13 +196,33 @@ namespace Database.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.HasIndex("AuthorId");
+                    b.HasKey("Id");
 
                     b.HasIndex("SubforumId");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("Posts");
+                });
+
+            modelBuilder.Entity("Database.Entities.Seeding.SeedEntity", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("SeededOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("SeedEntities");
                 });
 
             modelBuilder.Entity("Database.Entities.Subforum.Subforum", b =>
@@ -223,8 +256,11 @@ namespace Database.Migrations
                     b.Property<long>("CommentId")
                         .HasColumnType("bigint");
 
-                    b.Property<long>("PostId")
+                    b.Property<long?>("CommentReplyId")
                         .HasColumnType("bigint");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
@@ -236,6 +272,8 @@ namespace Database.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CommentId");
+
+                    b.HasIndex("CommentReplyId");
 
                     b.HasIndex("UserId");
 
@@ -459,23 +497,27 @@ namespace Database.Migrations
             modelBuilder.Entity("Database.Entities.Identity.ApplicationUser", b =>
                 {
                     b.HasOne("Database.Entities.Subforum.Subforum", null)
-                        .WithMany("Users")
+                        .WithMany("Administrators")
                         .HasForeignKey("SubforumId");
+
+                    b.HasOne("Database.Entities.Subforum.Subforum", null)
+                        .WithMany("Users")
+                        .HasForeignKey("SubforumId1");
                 });
 
             modelBuilder.Entity("Database.Entities.Posts.Post", b =>
                 {
-                    b.HasOne("Database.Entities.Identity.ApplicationUser", "Author")
-                        .WithMany()
-                        .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Database.Entities.Subforum.Subforum", null)
                         .WithMany("Posts")
                         .HasForeignKey("SubforumId");
 
-                    b.Navigation("Author");
+                    b.HasOne("Database.Entities.Identity.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Database.Entities.Votes.CommentVote", b =>
@@ -485,6 +527,10 @@ namespace Database.Migrations
                         .HasForeignKey("CommentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("Database.Entities.Comments.CommentReply", null)
+                        .WithMany("Votes")
+                        .HasForeignKey("CommentReplyId");
 
                     b.HasOne("Database.Entities.Identity.ApplicationUser", "User")
                         .WithMany()
@@ -574,6 +620,11 @@ namespace Database.Migrations
                     b.Navigation("Votes");
                 });
 
+            modelBuilder.Entity("Database.Entities.Comments.CommentReply", b =>
+                {
+                    b.Navigation("Votes");
+                });
+
             modelBuilder.Entity("Database.Entities.Posts.Post", b =>
                 {
                     b.Navigation("Comments");
@@ -583,6 +634,8 @@ namespace Database.Migrations
 
             modelBuilder.Entity("Database.Entities.Subforum.Subforum", b =>
                 {
+                    b.Navigation("Administrators");
+
                     b.Navigation("Posts");
 
                     b.Navigation("Users");
