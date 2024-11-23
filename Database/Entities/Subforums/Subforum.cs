@@ -1,7 +1,7 @@
 ﻿using Database.Entities.Identity;
 using Database.Entities.Posts;
 
-namespace Database.Entities.Subforum
+namespace Database.Entities.Subforums
 {
     public class Subforum
     {

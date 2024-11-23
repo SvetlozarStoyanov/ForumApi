@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Database.Migrations
 {
     [DbContext(typeof(ForumDbContext))]
-    [Migration("20241122132030_Initial")]
+    [Migration("20241123133311_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -46,6 +46,9 @@ namespace Database.Migrations
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -81,6 +84,9 @@ namespace Database.Migrations
                     b.Property<string>("Text")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -140,12 +146,6 @@ namespace Database.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("SubforumId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("SubforumId1")
-                        .HasColumnType("bigint");
-
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -162,10 +162,6 @@ namespace Database.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("SubforumId");
-
-                    b.HasIndex("SubforumId1");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -185,7 +181,7 @@ namespace Database.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<long?>("SubforumId")
+                    b.Property<long>("SubforumId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Text")
@@ -195,6 +191,9 @@ namespace Database.Migrations
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -207,6 +206,54 @@ namespace Database.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Posts");
+                });
+
+            modelBuilder.Entity("Database.Entities.Relationships.AdminSubforum", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("SubforumId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubforumId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AdminsSubforums");
+                });
+
+            modelBuilder.Entity("Database.Entities.Relationships.UserSubforum", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("SubforumId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubforumId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UsersSubforums");
                 });
 
             modelBuilder.Entity("Database.Entities.Seeding.SeedEntity", b =>
@@ -225,7 +272,7 @@ namespace Database.Migrations
                     b.ToTable("SeedEntities");
                 });
 
-            modelBuilder.Entity("Database.Entities.Subforum.Subforum", b =>
+            modelBuilder.Entity("Database.Entities.Subforums.Subforum", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -453,6 +500,10 @@ namespace Database.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasDiscriminator().HasValue("ApplicationRole");
                 });
 
@@ -494,28 +545,59 @@ namespace Database.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Database.Entities.Identity.ApplicationUser", b =>
-                {
-                    b.HasOne("Database.Entities.Subforum.Subforum", null)
-                        .WithMany("Administrators")
-                        .HasForeignKey("SubforumId");
-
-                    b.HasOne("Database.Entities.Subforum.Subforum", null)
-                        .WithMany("Users")
-                        .HasForeignKey("SubforumId1");
-                });
-
             modelBuilder.Entity("Database.Entities.Posts.Post", b =>
                 {
-                    b.HasOne("Database.Entities.Subforum.Subforum", null)
+                    b.HasOne("Database.Entities.Subforums.Subforum", "Subforum")
                         .WithMany("Posts")
-                        .HasForeignKey("SubforumId");
+                        .HasForeignKey("SubforumId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Database.Entities.Identity.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Subforum");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Database.Entities.Relationships.AdminSubforum", b =>
+                {
+                    b.HasOne("Database.Entities.Subforums.Subforum", "Subforum")
+                        .WithMany()
+                        .HasForeignKey("SubforumId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Database.Entities.Identity.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Subforum");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Database.Entities.Relationships.UserSubforum", b =>
+                {
+                    b.HasOne("Database.Entities.Subforums.Subforum", "Subforum")
+                        .WithMany()
+                        .HasForeignKey("SubforumId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Database.Entities.Identity.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Subforum");
 
                     b.Navigation("User");
                 });
@@ -632,13 +714,9 @@ namespace Database.Migrations
                     b.Navigation("Votes");
                 });
 
-            modelBuilder.Entity("Database.Entities.Subforum.Subforum", b =>
+            modelBuilder.Entity("Database.Entities.Subforums.Subforum", b =>
                 {
-                    b.Navigation("Administrators");
-
                     b.Navigation("Posts");
-
-                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,9 +1,11 @@
 ﻿using Database.Entities.Comments;
 using Database.Entities.Identity;
 using Database.Entities.Posts;
+using Database.Entities.Relationships;
 using Database.Entities.Seeding;
-using Database.Entities.Subforum;
+using Database.Entities.Subforums;
 using Database.Entities.Votes;
+using Database.Enums.Statuses;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +25,8 @@ namespace Database
         public DbSet<PostVote> PostVotes { get; set; }
         public DbSet<CommentVote> CommentVotes { get; set; }
         public DbSet<Subforum> Subforums { get; set; }
+        public DbSet<UserSubforum> UsersSubforums { get; set; }
+        public DbSet<AdminSubforum> AdminsSubforums { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -62,6 +66,25 @@ namespace Database
             builder.Entity<CommentReply>()
                 .Property(x => x.Status)
                 .HasConversion<string>();
+
+            builder.Entity<ApplicationUser>()
+                .HasMany(x => x.Subforums)
+                .WithMany(x => x.Users)
+                .UsingEntity<UserSubforum>();
+
+            builder.Entity<ApplicationUser>()
+                .HasMany(x => x.AdministratedSubforums)
+                .WithMany(x => x.Administrators)
+                .UsingEntity<AdminSubforum>();
+
+            builder.Entity<Post>()
+                .HasQueryFilter(x => x.Status == EntityStatus.Active);     
+            
+            builder.Entity<Comment>()
+                .HasQueryFilter(x => x.Status == EntityStatus.Active);           
+
+            builder.Entity<CommentReply>()
+                .HasQueryFilter(x => x.Status == EntityStatus.Active);
 
             base.OnModelCreating(builder);
         }
