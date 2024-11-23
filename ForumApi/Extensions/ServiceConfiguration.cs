@@ -1,12 +1,22 @@
 ﻿using Contracts.DataAccess.UnitOfWork;
+using Contracts.Services.Entity.CommentReplies;
+using Contracts.Services.Entity.Comments;
+using Contracts.Services.Entity.Posts;
+using Contracts.Services.Entity.Subforums;
 using Contracts.Services.Entity.Users;
 using Contracts.Services.JWT;
+using Contracts.Services.Managers;
 using Contracts.Services.Seeding;
 using DataAccess.UnitOfWork;
 using ForumApi.Middleware;
 using Models.Configuration;
-using Services.Entity.ApplicationUsers;
+using Services.Entity.CommentReplies;
+using Services.Entity.Comments;
+using Services.Entity.Posts;
+using Services.Entity.Subforums;
+using Services.Entity.Users;
 using Services.JWT;
+using Services.Managers;
 using Services.Seeding;
 
 namespace ForumApi.Extensions
@@ -20,6 +30,7 @@ namespace ForumApi.Extensions
             AddSeedingService(services);
 
             AddEntityServices(services);
+            AddManagers(services);
             AddJwtServices(services);
 
             AddCustomMiddleware(services);
@@ -39,6 +50,18 @@ namespace ForumApi.Extensions
         private static void AddEntityServices(IServiceCollection services)
         {
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ISubforumService, SubforumService>();
+            services.AddScoped<IPostService, PostService>();
+            services.AddScoped<ICommentService, CommentService>();
+            services.AddScoped<ICommentReplyService, CommentReplyService>();
+        }
+
+        private static void AddManagers(IServiceCollection services)
+        {
+            services.AddScoped<ISubforumManager, SubforumManager>();
+            services.AddScoped<IPostManager, PostManager>();
+            services.AddScoped<ICommentManager, CommentManager>();
+            services.AddScoped<ICommentReplyManager, CommentReplyManager>();
         }
 
         private static void AddUnitOfWork(IServiceCollection services)

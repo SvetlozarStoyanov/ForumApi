@@ -1,4 +1,4 @@
-﻿using Database.Entities.Subforum;
+﻿using Database.Entities.Subforums;
 
 namespace Contracts.DataAccess.Repositories.Subforums
 {

@@ -1,6 +1,6 @@
 ﻿using Contracts.DataAccess.Repositories.Subforums;
 using Database;
-using Database.Entities.Subforum;
+using Database.Entities.Subforums;
 
 namespace DataAccess.Repositories.Subforums
 {
