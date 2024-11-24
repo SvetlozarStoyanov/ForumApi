@@ -23,7 +23,7 @@ namespace ForumApi.Controllers
         [Route("create")]
         public async Task<IActionResult> CreateComment(CommentReplyCreateDto commentReplyCreateDto)
         {
-            var operationResult = await commentReplyManager.CreateCommentReplyAsync(commentReplyCreateDto, User.GetId());
+            var operationResult = await commentReplyManager.CreateCommentReplyAsync(User.GetId(), commentReplyCreateDto);
 
             if (!operationResult.IsSuccessful)
             {
@@ -37,7 +37,7 @@ namespace ForumApi.Controllers
         [Route("update/{id}")]
         public async Task<IActionResult> UpdateComment([FromRoute] long id, CommentReplyUpdateDto commentUpdateDto)
         {
-            var operationResult = await commentReplyManager.UpdateCommentReplyAsync(id, commentUpdateDto, User.GetId());
+            var operationResult = await commentReplyManager.UpdateCommentReplyAsync(id, User.GetId(), commentUpdateDto);
 
             if (!operationResult.IsSuccessful)
             {

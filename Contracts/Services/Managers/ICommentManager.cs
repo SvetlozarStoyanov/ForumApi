@@ -5,9 +5,12 @@ namespace Contracts.Services.Managers
 {
     public interface ICommentManager
     {
-        Task<OperationResult> CreateCommentAsync(CommentCreateDto commentCreateDto, string userId);
+        Task<OperationResult> CreateCommentAsync(string userId,
+            CommentCreateDto commentCreateDto);
 
-        Task<OperationResult> UpdateCommentAsync(long commentId, CommentUpdateDto commentUpdateDto, string userId);
+        Task<OperationResult> UpdateCommentAsync(long commentId,
+            string userId,
+            CommentUpdateDto commentUpdateDto);
 
         Task<OperationResult> DeleteCommentAsync(long commentId, string userId);
     }

@@ -20,7 +20,7 @@ namespace Services.Managers
             this.commentService = commentService;
         }
 
-        public async Task<OperationResult> CreateCommentAsync(CommentCreateDto commentCreateDto, string userId)
+        public async Task<OperationResult> CreateCommentAsync(string userId, CommentCreateDto commentCreateDto)
         {
             var operationResult = new OperationResult();
 
@@ -47,7 +47,7 @@ namespace Services.Managers
             return operationResult;
         }
 
-        public async Task<OperationResult> UpdateCommentAsync(long commentId, CommentUpdateDto commentUpdateDto, string userId)
+        public async Task<OperationResult> UpdateCommentAsync(long commentId, string userId, CommentUpdateDto commentUpdateDto)
         {
             var operationResult = new OperationResult();
 
@@ -59,7 +59,7 @@ namespace Services.Managers
                 return operationResult;
             }
 
-            var updateCommentResult = await commentService.UpdateCommentAsync(commentId, commentUpdateDto, userId);
+            var updateCommentResult = await commentService.UpdateCommentAsync(commentId, userId, commentUpdateDto);
 
             if (!updateCommentResult.IsSuccessful)
             {

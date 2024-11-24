@@ -2,7 +2,6 @@
 using Database.Entities.Identity;
 using Models.Common;
 using Models.DTOs.CommentReplies;
-using Models.DTOs.Comments;
 
 namespace Contracts.Services.Entity.CommentReplies
 {
@@ -12,7 +11,7 @@ namespace Contracts.Services.Entity.CommentReplies
             ApplicationUser user,
             Comment comment);
 
-        Task<OperationResult> UpdateCommentReplyAsync(long commentReplyId, CommentReplyUpdateDto commentReplyUpdateDto, string userId);
+        Task<OperationResult> UpdateCommentReplyAsync(long commentReplyId, string userId, CommentReplyUpdateDto commentReplyUpdateDto);
 
         Task<OperationResult> DeleteCommentReplyAsync(long commentReplyId, string userId);
     }

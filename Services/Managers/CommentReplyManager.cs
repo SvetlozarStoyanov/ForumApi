@@ -25,7 +25,8 @@ namespace Services.Managers
             this.commentReplyService = commentReplyService;
         }
 
-        public async Task<OperationResult> CreateCommentReplyAsync(CommentReplyCreateDto commentReplyCreateDto, string userId)
+        public async Task<OperationResult> CreateCommentReplyAsync(string userId,
+            CommentReplyCreateDto commentReplyCreateDto)
         {
             var operationResult = new OperationResult();
 
@@ -52,7 +53,7 @@ namespace Services.Managers
             return operationResult;
         }
 
-        public async Task<OperationResult> UpdateCommentReplyAsync(long commentReplyId, CommentReplyUpdateDto commentReplyUpdateDto, string userId)
+        public async Task<OperationResult> UpdateCommentReplyAsync(long commentReplyId, string userId, CommentReplyUpdateDto commentReplyUpdateDto)
         {
             var operationResult = new OperationResult();
 
@@ -63,7 +64,7 @@ namespace Services.Managers
                 operationResult.AddError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
                 return operationResult;
             }
-            var updateCommentReplyResult = await commentReplyService.UpdateCommentReplyAsync(commentReplyId, commentReplyUpdateDto, userId);
+            var updateCommentReplyResult = await commentReplyService.UpdateCommentReplyAsync(commentReplyId, userId, commentReplyUpdateDto);
 
             if (!updateCommentReplyResult.IsSuccessful)
             {

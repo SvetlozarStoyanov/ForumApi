@@ -22,7 +22,7 @@ namespace ForumApi.Controllers
         [Route("create")]
         public async Task<IActionResult> CreatePost(PostCreateDto postCreateDto)
         {
-            var operationResult = await postManager.CreatePostAsync(postCreateDto, User.GetId());
+            var operationResult = await postManager.CreatePostAsync(User.GetId(), postCreateDto);
 
             if (!operationResult.IsSuccessful)
             {
@@ -36,7 +36,7 @@ namespace ForumApi.Controllers
         [Route("update/{id}")]
         public async Task<IActionResult> CreatePost([FromRoute] long id, PostUpdateDto postUpdateDto)
         {
-            var operationResult = await postManager.UpdatePostAsync(id, postUpdateDto, User.GetId());
+            var operationResult = await postManager.UpdatePostAsync(id, User.GetId(), postUpdateDto);
 
             if (!operationResult.IsSuccessful)
             {

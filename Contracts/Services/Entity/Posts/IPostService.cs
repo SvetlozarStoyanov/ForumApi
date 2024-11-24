@@ -11,7 +11,7 @@ namespace Contracts.Services.Entity.Posts
             ApplicationUser user,
             Subforum subforum);
 
-        Task<OperationResult> UpdatePostAsync(long postId, PostUpdateDto postUpdateDto, string userId);
+        Task<OperationResult> UpdatePostAsync(long postId, string userId, PostUpdateDto postUpdateDto);
 
         Task<OperationResult> DeletePostAsync(long postId, string userId);
     }

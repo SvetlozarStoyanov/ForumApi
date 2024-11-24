@@ -19,7 +19,7 @@ namespace Services.Managers
             this.postService = postService;
         }
 
-        public async Task<OperationResult> CreatePostAsync(PostCreateDto postCreateDto, string userId)
+        public async Task<OperationResult> CreatePostAsync(string userId, PostCreateDto postCreateDto)
         {
             var operationResult = new OperationResult();
 
@@ -47,8 +47,8 @@ namespace Services.Managers
         }
 
         public async Task<OperationResult> UpdatePostAsync(long postId,
-            PostUpdateDto postUpdateDto,
-            string userId)
+            string userId,
+            PostUpdateDto postUpdateDto)
         {
             var operationResult = new OperationResult();
 
@@ -60,7 +60,7 @@ namespace Services.Managers
                 return operationResult;
             }
 
-            var updatePostResult = await postService.UpdatePostAsync(postId, postUpdateDto, userId);
+            var updatePostResult = await postService.UpdatePostAsync(postId, userId, postUpdateDto);
 
             if (!updatePostResult.IsSuccessful)
             {

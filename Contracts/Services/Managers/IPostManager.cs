@@ -5,9 +5,9 @@ namespace Contracts.Services.Managers
 {
     public interface IPostManager
     {
-        Task<OperationResult> CreatePostAsync(PostCreateDto postCreateDto, string userId);
+        Task<OperationResult> CreatePostAsync(string userId, PostCreateDto postCreateDto);
 
-        Task<OperationResult> UpdatePostAsync(long postId, PostUpdateDto postUpdateDto, string userId);
+        Task<OperationResult> UpdatePostAsync(long postId, string userId, PostUpdateDto postUpdateDto);
 
         Task<OperationResult> DeletePostAsync(long postId, string userId);
     }

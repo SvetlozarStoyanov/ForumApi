@@ -11,7 +11,7 @@ namespace Contracts.Services.Entity.Comments
             ApplicationUser user,
             Post post);
 
-        Task<OperationResult> UpdateCommentAsync(long commentId, CommentUpdateDto commentUpdateDto, string userId);
+        Task<OperationResult> UpdateCommentAsync(long commentId, string userId, CommentUpdateDto commentUpdateDto);
        
         Task<OperationResult> DeleteCommentAsync(long commentId, string userId);
     }

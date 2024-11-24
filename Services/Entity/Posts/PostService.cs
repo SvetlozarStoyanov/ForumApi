@@ -39,7 +39,7 @@ namespace Services.Entity.Posts
             await unitOfWork.PostRepository.AddAsync(post);
         }
 
-        public async Task<OperationResult> UpdatePostAsync(long postId, PostUpdateDto postUpdateDto, string userId)
+        public async Task<OperationResult> UpdatePostAsync(long postId, string userId, PostUpdateDto postUpdateDto)
         {
             var operationResult = new OperationResult();
 

@@ -34,7 +34,7 @@ namespace Services.Entity.CommentReplies
             await unitOfWork.CommentReplyRepository.AddAsync(commentReply);
         }
 
-        public async Task<OperationResult> UpdateCommentReplyAsync(long commentReplyId, CommentReplyUpdateDto commentReplyUpdateDto, string userId)
+        public async Task<OperationResult> UpdateCommentReplyAsync(long commentReplyId, string userId, CommentReplyUpdateDto commentReplyUpdateDto)
         {
             var operationResult = new OperationResult();
 
