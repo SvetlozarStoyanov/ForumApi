@@ -28,7 +28,7 @@ namespace Services.Managers
 
             if (user is null)
             {
-                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
                 return operationResult;
             }
 
@@ -36,7 +36,7 @@ namespace Services.Managers
 
             if (post is null)
             {
-                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"{nameof(Post)} with id: {commentCreateDto.PostId} was not found!"));
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"{nameof(Post)} with id: {commentCreateDto.PostId} was not found!"));
                 return operationResult;
             }
 
@@ -55,7 +55,7 @@ namespace Services.Managers
 
             if (user is null)
             {
-                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
                 return operationResult;
             }
 
@@ -80,7 +80,7 @@ namespace Services.Managers
 
             if (user is null)
             {
-                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
                 return operationResult;
             }
 

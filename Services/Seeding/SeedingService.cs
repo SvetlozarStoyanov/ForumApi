@@ -269,7 +269,7 @@ namespace Services.Seeding
             var operationResult = new OperationResult();
             if (await CheckAlreadySeededAsync())
             {
-                operationResult.AppendError(new Error(ErrorTypes.InternalServerError, "Database is already seeded!"));
+                operationResult.AddError(new Error(ErrorTypes.InternalServerError, "Database is already seeded!"));
                 return operationResult;
             }
 

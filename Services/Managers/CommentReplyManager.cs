@@ -33,7 +33,7 @@ namespace Services.Managers
 
             if (user is null)
             {
-                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
                 return operationResult;
             }
 
@@ -41,7 +41,7 @@ namespace Services.Managers
 
             if (comment is null)
             {
-                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"{nameof(Comment)} with id: {commentReplyCreateDto.CommentId} was not found!"));
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"{nameof(Comment)} with id: {commentReplyCreateDto.CommentId} was not found!"));
                 return operationResult;
             }
 
@@ -60,7 +60,7 @@ namespace Services.Managers
 
             if (user is null)
             {
-                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
                 return operationResult;
             }
             var updateCommentReplyResult = await commentReplyService.UpdateCommentReplyAsync(commentReplyId, commentReplyUpdateDto, userId);
@@ -84,7 +84,7 @@ namespace Services.Managers
 
             if (user is null)
             {
-                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
                 return operationResult;
             }
 

@@ -48,13 +48,13 @@ namespace Services.Entity.Posts
 
             if (post is null)
             {
-                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"{nameof(Post)} with id: {postId} was not found!"));
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"{nameof(Post)} with id: {postId} was not found!"));
                 return operationResult;
             }
 
             if (post.UserId != userId)
             {
-                operationResult.AppendError(new Error(ErrorTypes.BadRequest, $"{nameof(Post)} with id: {postId} does not belong to user with id: {userId}!"));
+                operationResult.AddError(new Error(ErrorTypes.BadRequest, $"{nameof(Post)} with id: {postId} does not belong to user with id: {userId}!"));
                 return operationResult;
             }
 
@@ -73,13 +73,13 @@ namespace Services.Entity.Posts
 
             if (post is null)
             {
-                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"{nameof(Post)} with id: {postId} was not found!"));
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"{nameof(Post)} with id: {postId} was not found!"));
                 return operationResult;
             }
 
             if (post.UserId != userId)
             {
-                operationResult.AppendError(new Error(ErrorTypes.BadRequest, $"{nameof(Post)} with id: {postId} does not belong to user with id: {userId}!"));
+                operationResult.AddError(new Error(ErrorTypes.BadRequest, $"{nameof(Post)} with id: {postId} does not belong to user with id: {userId}!"));
                 return operationResult;
             }
 

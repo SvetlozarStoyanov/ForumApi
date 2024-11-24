@@ -27,7 +27,7 @@ namespace Services.Managers
 
             if (user is null)
             {
-                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
                 return operationResult;
             }
 
@@ -35,7 +35,7 @@ namespace Services.Managers
 
             if (subforum is null)
             {
-                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"{nameof(Subforum)} with id: {postCreateDto.SubforumId} does note exist!"));
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"{nameof(Subforum)} with id: {postCreateDto.SubforumId} does note exist!"));
                 return operationResult;
             }
 
@@ -56,7 +56,7 @@ namespace Services.Managers
 
             if (author is null)
             {
-                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
                 return operationResult;
             }
 
@@ -81,7 +81,7 @@ namespace Services.Managers
 
             if (user is null)
             {
-                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
                 return operationResult;
             }
 

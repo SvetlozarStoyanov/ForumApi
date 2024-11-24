@@ -11,7 +11,7 @@
 
         public ICollection<Error> Errors { get; set; }
 
-        public void AppendError(Error error)
+        public void AddError(Error error)
         {
             Errors.Add(error);
         }
@@ -21,7 +21,7 @@
             AppendErrors(operationResult.Errors);
         }
 
-        public void AppendErrors(IEnumerable<Error> errors)
+        private void AppendErrors(IEnumerable<Error> errors)
         {
             foreach (var error in errors)
             {

@@ -42,13 +42,13 @@ namespace Services.Entity.CommentReplies
 
             if (comment is null)
             {
-                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"{nameof(CommentReply)} with id: {commentReplyId} was not found!"));
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"{nameof(CommentReply)} with id: {commentReplyId} was not found!"));
                 return operationResult;
             }
 
             if (comment.UserId != userId)
             {
-                operationResult.AppendError(new Error(ErrorTypes.BadRequest, $"{nameof(CommentReply)} with id: {commentReplyId} does not belong to User with id: {userId}"));
+                operationResult.AddError(new Error(ErrorTypes.BadRequest, $"{nameof(CommentReply)} with id: {commentReplyId} does not belong to User with id: {userId}"));
                 return operationResult;
             }
 
@@ -66,13 +66,13 @@ namespace Services.Entity.CommentReplies
 
             if (commentReply is null)
             {
-                operationResult.AppendError(new Error(ErrorTypes.NotFound, $"{nameof(CommentReply)} with id: {commentReplyId} was not found!"));
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"{nameof(CommentReply)} with id: {commentReplyId} was not found!"));
                 return operationResult;
             }
 
             if (commentReply.UserId != userId)
             {
-                operationResult.AppendError(new Error(ErrorTypes.BadRequest, $"{nameof(CommentReply)} with id: {commentReplyId} does not belong to User with id: {userId}"));
+                operationResult.AddError(new Error(ErrorTypes.BadRequest, $"{nameof(CommentReply)} with id: {commentReplyId} does not belong to User with id: {userId}"));
                 return operationResult;
             }
 
