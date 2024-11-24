@@ -20,7 +20,7 @@ namespace Services.Managers
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task<OperationResult> CreateSubforumAsync(SubforumCreateDto subforumCreateDto, string userId)
+        public async Task<OperationResult> CreateSubforumAsync(string userId, SubforumCreateDto subforumCreateDto)
         {
             var operationResult = new OperationResult();
 
@@ -37,6 +37,31 @@ namespace Services.Managers
             if (!createSubforumResult.IsSuccessful)
             {
                 operationResult.AppendErrors(createSubforumResult);
+                return operationResult;
+            }
+
+            await unitOfWork.SaveChangesAsync();
+
+            return operationResult;
+        }
+
+        public async Task<OperationResult> JoinSubforumAsync(long subforumId, string userId)
+        {
+            var operationResult = new OperationResult();
+
+            var user = await unitOfWork.UserRepository.GetByIdAsync(userId);
+
+            if (user is null)
+            {
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
+                return operationResult;
+            }
+
+            var joinForumResult = await subforumService.JoinSubforumAsync(subforumId, user);
+
+            if (!joinForumResult.IsSuccessful)
+            {
+                operationResult.AppendErrors(joinForumResult);
                 return operationResult;
             }
 

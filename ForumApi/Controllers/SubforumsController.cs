@@ -22,8 +22,22 @@ namespace ForumApi.Controllers
         [Route("create")]
         public async Task<IActionResult> CreateSubforum(SubforumCreateDto subforumCreateDto)
         {
-            var operationResult = await subforumManager.CreateSubforumAsync(subforumCreateDto, User.GetId());
+            var operationResult = await subforumManager.CreateSubforumAsync(User.GetId(), subforumCreateDto);
             
+            if (!operationResult.IsSuccessful)
+            {
+                return this.Error(operationResult);
+            }
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("join/{id}")]
+        public async Task<IActionResult> JoinSubforum([FromRoute] long id)
+        {
+            var operationResult = await subforumManager.JoinSubforumAsync(id, User.GetId());
+
             if (!operationResult.IsSuccessful)
             {
                 return this.Error(operationResult);

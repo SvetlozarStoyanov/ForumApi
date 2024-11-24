@@ -7,5 +7,7 @@ namespace Contracts.Services.Entity.Subforums
     public interface ISubforumService
     {
         Task<OperationResult> CreateSubforumAsync(SubforumCreateDto subforumCreateDto, ApplicationUser admin);
+
+        Task<OperationResult> JoinSubforumAsync(long subforumId, ApplicationUser user);
     }
 }
