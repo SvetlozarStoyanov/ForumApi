@@ -35,7 +35,7 @@ namespace Services.JWT
                 issuer: options.Value.Issuer,
                 audience: options.Value.Audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(30),
+                expires: DateTime.UtcNow.AddHours(1),
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
