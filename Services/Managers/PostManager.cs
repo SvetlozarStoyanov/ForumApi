@@ -52,9 +52,9 @@ namespace Services.Managers
         {
             var operationResult = new OperationResult();
 
-            var author = await unitOfWork.UserRepository.GetByIdAsync(userId);
+            var user = await unitOfWork.UserRepository.GetByIdAsync(userId);
 
-            if (author is null)
+            if (user is null)
             {
                 operationResult.AddError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
                 return operationResult;
