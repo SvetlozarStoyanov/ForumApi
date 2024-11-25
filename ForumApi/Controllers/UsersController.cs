@@ -11,6 +11,8 @@ using Contracts.Services.Entity.Users;
 namespace ForumApi.Controllers
 {
     [ApiController]
+    [Authorize]
+
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
@@ -31,6 +33,7 @@ namespace ForumApi.Controllers
             this.jwtService = jwtService;
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> Login(UserLoginDto userLoginDto)
@@ -42,7 +45,7 @@ namespace ForumApi.Controllers
                 return BadRequest("Already logged in!");
             }
 
-            var user = await userManager.FindByNameAsync(userLoginDto.UserName);
+            var user = await userManager.FindByNameAsync(userLoginDto.Username);
 
             if (user == null || !(await userManager.CheckPasswordAsync(user, userLoginDto.Password)))
             {
@@ -51,9 +54,18 @@ namespace ForumApi.Controllers
 
             var token = jwtService.GenerateJwtToken(user.Id, user.UserName);
 
-            return Ok(token);
+            Response.Cookies.Append("jwt", token, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true, // Ensure this is only true in HTTPS environments
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddDays(1)
+            });
+
+            return Ok(new { token });
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("register")]
         public async Task<IActionResult> Register(UserRegisterDto userRegisterDto)
@@ -86,10 +98,32 @@ namespace ForumApi.Controllers
             }
 
             var token = jwtService.GenerateJwtToken(user.Id, user.UserName);
-            return Ok(token);
+
+            Response.Cookies.Append("jwt", token, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true, // Ensure this is only true in HTTPS environments
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddDays(1)
+            });
+
+            return Ok(new { token });
         }
 
-        [Authorize]
+        [HttpPost]
+        [Route("get-info")]
+        public async Task<IActionResult> GetUserInfo()
+        {
+            var operationResult = await userService.GetUserByIdAsync(User.GetId());
+
+            if (!operationResult.IsSuccessful)
+            {
+                return this.Error(operationResult);
+            }
+
+            return Ok(operationResult.Data);
+        }
+
         [HttpGet]
         [Route("auth-test")]
         public IActionResult AuthTest()
