@@ -83,6 +83,18 @@ namespace ForumApi
                 });
             });
 
+            var corsName = "ForumFE";
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(name: corsName,
+                                  policy =>
+                                  {
+                                      policy.WithOrigins("http://localhost:4200/");
+                                  });
+            });
+
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -96,6 +108,8 @@ namespace ForumApi
 
             app.UseMiddleware<ExpiredTokenMiddleware>();
             app.UseMiddleware<ExceptionHandlingMiddleware>();
+
+            app.UseCors(corsName);
             app.UseAuthentication();
             app.UseAuthorization();
 
