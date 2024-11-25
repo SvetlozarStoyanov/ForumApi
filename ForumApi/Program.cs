@@ -59,6 +59,18 @@ namespace ForumApi
                     ValidAudience = audience,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key)) // Use a secure key
                 };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        if (context.Request.Cookies.ContainsKey("jwt"))
+                        {
+                            context.Token = context.Request.Cookies["jwt"];
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
             builder.Services.AddApplicationServices(builder.Configuration);
@@ -90,7 +102,11 @@ namespace ForumApi
                 options.AddPolicy(name: corsName,
                                   policy =>
                                   {
-                                      policy.WithOrigins("http://localhost:4200/");
+                                      policy.WithOrigins("http://localhost:4200")
+                                      .AllowAnyMethod()
+                                      .AllowAnyHeader()
+                                      .AllowCredentials()
+                                      .SetIsOriginAllowedToAllowWildcardSubdomains();
                                   });
             });
 
@@ -110,6 +126,7 @@ namespace ForumApi
             app.UseMiddleware<ExceptionHandlingMiddleware>();
 
             app.UseCors(corsName);
+
             app.UseAuthentication();
             app.UseAuthorization();
 
