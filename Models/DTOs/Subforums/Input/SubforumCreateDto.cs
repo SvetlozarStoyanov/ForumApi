@@ -1,4 +1,4 @@
-﻿namespace Models.DTOs.Subforums
+﻿namespace Models.DTOs.Subforums.Input
 {
     public class SubforumCreateDto
     {

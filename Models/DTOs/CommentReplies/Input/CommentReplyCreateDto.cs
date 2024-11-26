@@ -1,4 +1,4 @@
-﻿namespace Models.DTOs.CommentReplies
+﻿namespace Models.DTOs.CommentReplies.Input
 {
     public class CommentReplyCreateDto
     {

@@ -1,4 +1,4 @@
-﻿namespace Models.DTOs.Comments
+﻿namespace Models.DTOs.Comments.Input
 {
     public class CommentCreateDto
     {

@@ -1,4 +1,4 @@
-﻿namespace Models.DTOs.Users
+﻿namespace Models.DTOs.Users.Output
 {
     public class UserShortInfoDto
     {
