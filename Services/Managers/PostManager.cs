@@ -4,7 +4,8 @@ using Contracts.Services.Managers;
 using Database.Entities.Subforums;
 using Models.Common;
 using Models.Common.Enums;
-using Models.DTOs.Posts;
+using Models.DTOs.Posts.Input;
+using Models.DTOs.Posts.Output;
 
 namespace Services.Managers
 {
@@ -96,6 +97,11 @@ namespace Services.Managers
             await unitOfWork.SaveChangesAsync();
 
             return operationResult;
+        }
+
+        public async Task<IEnumerable<PostListDto>> GetHomePagePostsForGuestUserAsync()
+        {
+            return await postService.GetHomePagePostsForGuestUserAsync();
         }
     }
 }

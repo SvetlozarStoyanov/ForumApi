@@ -2,7 +2,7 @@
 using ForumApi.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Models.DTOs.Posts;
+using Models.DTOs.Posts.Input;
 
 namespace ForumApi.Controllers
 {
@@ -17,6 +17,17 @@ namespace ForumApi.Controllers
         {
             this.postManager = postManager;
         }
+
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("get-guest-user-posts")]
+        public async Task<IActionResult> GetGuestUserHomePagePosts()
+        {
+            var posts = await postManager.GetHomePagePostsForGuestUserAsync();
+
+            return Ok(posts);
+        }
+
 
         [HttpPost]
         [Route("create")]

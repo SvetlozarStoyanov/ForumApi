@@ -4,10 +4,13 @@ using Database.Entities.Identity;
 using Database.Entities.Posts;
 using Database.Entities.Subforums;
 using Database.Enums.Statuses;
+using Database.Enums.Votes;
 using Microsoft.EntityFrameworkCore;
 using Models.Common;
 using Models.Common.Enums;
-using Models.DTOs.Posts;
+using Models.DTOs.Posts.Input;
+using Models.DTOs.Posts.Output;
+using Models.DTOs.Users.Output;
 
 namespace Services.Entity.Posts
 {
@@ -87,6 +90,28 @@ namespace Services.Entity.Posts
             post.UpdatedOn = DateTime.UtcNow;
 
             return operationResult;
+        }
+
+        public async Task<IEnumerable<PostListDto>> GetHomePagePostsForGuestUserAsync()
+        {
+            var posts = await unitOfWork.PostRepository.AllAsNoTracking()
+                .OrderByDescending(x => x.CreatedOn)
+                .Take(20)
+                .Select(x => new PostListDto()
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Text = x.Text,
+                    VoteTally = x.Votes.Where(x => x.Type == PostVotes.Up).Count() - x.Votes.Where(x => x.Type == PostVotes.Down).Count(),
+                    User = new UserPostMinInfoDto()
+                    {
+                        Id = x.UserId,
+                        Username = x.User.UserName!
+                    }
+                })
+                .ToListAsync();
+
+            return posts;
         }
     }
 }

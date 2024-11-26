@@ -1,12 +1,15 @@
 ﻿using Database.Entities.Identity;
 using Database.Entities.Subforums;
 using Models.Common;
-using Models.DTOs.Posts;
+using Models.DTOs.Posts.Input;
+using Models.DTOs.Posts.Output;
 
 namespace Contracts.Services.Entity.Posts
 {
     public interface IPostService
     {
+        Task<IEnumerable<PostListDto>> GetHomePagePostsForGuestUserAsync();
+
         Task CreatePostAsync(PostCreateDto postCreateDto,
             ApplicationUser user,
             Subforum subforum);
