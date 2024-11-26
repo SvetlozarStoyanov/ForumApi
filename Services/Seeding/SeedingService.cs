@@ -143,6 +143,24 @@ namespace Services.Seeding
                         User = users[0],
                         CreatedOn = DateTime.UtcNow.AddDays(-2),
                         UpdatedOn = DateTime.UtcNow.AddDays(-2),
+                        Votes = new List<PostVote>()
+                        {
+                            new PostVote()
+                            {
+                                User = users[2],
+                                Type = PostVotes.Up,
+                            },
+                            new PostVote()
+                            {
+                                User = users[3],
+                                Type = PostVotes.Up,
+                            },
+                            new PostVote()
+                            {
+                                User = users[4],
+                                Type = PostVotes.Down,
+                            },
+                        },
                         Comments = new List<Comment>()
                         {
                             new Comment()
@@ -192,6 +210,24 @@ namespace Services.Seeding
                         User = users[11],
                         CreatedOn = DateTime.UtcNow.AddDays(-2),
                         UpdatedOn = DateTime.UtcNow.AddDays(-2),
+                        Votes = new List<PostVote>()
+                        {
+                            new PostVote()
+                            {
+                                User = users[11],
+                                Type = PostVotes.Up,
+                            },
+                            new PostVote()
+                            {
+                                User = users[16],
+                                Type = PostVotes.Down,
+                            },
+                            new PostVote()
+                            {
+                                User = users[18],
+                                Type = PostVotes.Down,
+                            },
+                        },
                         Comments = new List<Comment>()
                         {
                             new Comment()
@@ -207,26 +243,26 @@ namespace Services.Seeding
                                         User = users[11],
                                         CreatedOn = DateTime.UtcNow.AddDays(-3),
                                         Type = CommentVotes.Up,
-                                    }
-                                    ,new CommentVote
+                                    },
+                                    new CommentVote
                                     {
                                         User = users[16],
                                         CreatedOn = DateTime.UtcNow.AddDays(-3),
                                         Type = CommentVotes.Up,
-                                    }
-                                    ,new CommentVote
+                                    },
+                                    new CommentVote
                                     {
                                         User = users[18],
                                         CreatedOn = DateTime.UtcNow.AddDays(-3),
                                         Type = CommentVotes.Up,
-                                    }
-                                    ,new CommentVote
+                                    },
+                                    new CommentVote
                                     {
                                         User = users[19],
                                         CreatedOn = DateTime.UtcNow.AddDays(-3),
                                         Type = CommentVotes.Up,
-                                    }
-                                    ,new CommentVote
+                                    },
+                                    new CommentVote
                                     {
                                         User = users[25],
                                         CreatedOn = DateTime.UtcNow.AddDays(-2),
