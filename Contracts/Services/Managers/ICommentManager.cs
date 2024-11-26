@@ -1,5 +1,5 @@
 ﻿using Models.Common;
-using Models.DTOs.Comments;
+using Models.DTOs.Comments.Input;
 
 namespace Contracts.Services.Managers
 {

@@ -2,7 +2,7 @@
 using ForumApi.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Models.DTOs.CommentReplies;
+using Models.DTOs.CommentReplies.Input;
 using Models.DTOs.Comments;
 
 namespace ForumApi.Controllers

@@ -1,7 +1,7 @@
 ﻿using Database.Entities.Comments;
 using Database.Entities.Identity;
 using Models.Common;
-using Models.DTOs.CommentReplies;
+using Models.DTOs.CommentReplies.Input;
 
 namespace Contracts.Services.Entity.CommentReplies
 {

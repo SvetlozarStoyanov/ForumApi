@@ -4,7 +4,7 @@ using Contracts.Services.Managers;
 using Database.Entities.Posts;
 using Models.Common;
 using Models.Common.Enums;
-using Models.DTOs.Comments;
+using Models.DTOs.Comments.Input;
 using System.Security.Cryptography.X509Certificates;
 
 namespace Services.Managers

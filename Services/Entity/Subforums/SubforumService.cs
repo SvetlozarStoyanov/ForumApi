@@ -5,7 +5,7 @@ using Database.Entities.Subforums;
 using Microsoft.EntityFrameworkCore;
 using Models.Common;
 using Models.Common.Enums;
-using Models.DTOs.Subforums;
+using Models.DTOs.Subforums.Input;
 
 namespace Services.Entity.Subforums
 {

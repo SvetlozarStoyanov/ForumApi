@@ -17,7 +17,6 @@ namespace Database.Migrations
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(21)", maxLength: 21, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -306,7 +305,7 @@ namespace Database.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PostId = table.Column<long>(type: "bigint", nullable: false),
-                    Type = table.Column<int>(type: "int", nullable: false)
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -364,8 +363,7 @@ namespace Database.Migrations
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CommentId = table.Column<long>(type: "bigint", nullable: false),
-                    Type = table.Column<int>(type: "int", nullable: false),
-                    CommentReplyId = table.Column<long>(type: "bigint", nullable: true)
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -377,16 +375,31 @@ namespace Database.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_CommentVotes_CommentReplies_CommentReplyId",
-                        column: x => x.CommentReplyId,
-                        principalTable: "CommentReplies",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_CommentVotes_Comments_CommentId",
                         column: x => x.CommentId,
                         principalTable: "Comments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CommentReplyVotes",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CommentReplyId = table.Column<long>(type: "bigint", nullable: false),
+                    Type = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CommentReplyVotes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_CommentReplyVotes_CommentReplies_CommentReplyId",
+                        column: x => x.CommentReplyId,
+                        principalTable: "CommentReplies",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -449,6 +462,11 @@ namespace Database.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CommentReplyVotes_CommentReplyId",
+                table: "CommentReplyVotes",
+                column: "CommentReplyId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Comments_PostId",
                 table: "Comments",
                 column: "PostId");
@@ -462,11 +480,6 @@ namespace Database.Migrations
                 name: "IX_CommentVotes_CommentId",
                 table: "CommentVotes",
                 column: "CommentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CommentVotes_CommentReplyId",
-                table: "CommentVotes",
-                column: "CommentReplyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_CommentVotes_UserId",
@@ -524,6 +537,9 @@ namespace Database.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "CommentReplyVotes");
 
             migrationBuilder.DropTable(
                 name: "CommentVotes");

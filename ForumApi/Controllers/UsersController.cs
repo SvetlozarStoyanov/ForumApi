@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ForumApi.Extensions;
-using Models.DTOs.Users;
 using Contracts.Services.Entity.Users;
+using Models.DTOs.Users.Input;
 
 namespace ForumApi.Controllers
 {
@@ -47,7 +47,7 @@ namespace ForumApi.Controllers
 
             var user = await userManager.FindByNameAsync(userLoginDto.Username);
 
-            if (user == null || !(await userManager.CheckPasswordAsync(user, userLoginDto.Password)))
+            if (user is null || !(await userManager.CheckPasswordAsync(user, userLoginDto.Password)))
             {
                 return BadRequest("Incorrect username or password!");
             }
@@ -62,7 +62,7 @@ namespace ForumApi.Controllers
                 Expires = DateTime.UtcNow.AddDays(1)
             });
 
-            return Ok(new { token });
+            return Ok(new { Username = user.UserName, Email = user.Email });
         }
 
         [AllowAnonymous]

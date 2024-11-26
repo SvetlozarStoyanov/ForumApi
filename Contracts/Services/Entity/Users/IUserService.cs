@@ -1,5 +1,5 @@
 ﻿using Models.Common;
-using Models.DTOs.Users;
+using Models.DTOs.Users.Output;
 
 namespace Contracts.Services.Entity.Users
 {

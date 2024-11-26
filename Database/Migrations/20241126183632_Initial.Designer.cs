@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Database.Migrations
 {
     [DbContext(typeof(ForumDbContext))]
-    [Migration("20241123133311_Initial")]
+    [Migration("20241126183632_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -292,6 +292,28 @@ namespace Database.Migrations
                     b.ToTable("Subforums");
                 });
 
+            modelBuilder.Entity("Database.Entities.Votes.CommentReplyVote", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("CommentReplyId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommentReplyId");
+
+                    b.ToTable("CommentReplyVotes");
+                });
+
             modelBuilder.Entity("Database.Entities.Votes.CommentVote", b =>
                 {
                     b.Property<long>("Id")
@@ -303,14 +325,12 @@ namespace Database.Migrations
                     b.Property<long>("CommentId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("CommentReplyId")
-                        .HasColumnType("bigint");
-
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -319,8 +339,6 @@ namespace Database.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CommentId");
-
-                    b.HasIndex("CommentReplyId");
 
                     b.HasIndex("UserId");
 
@@ -338,8 +356,9 @@ namespace Database.Migrations
                     b.Property<long>("PostId")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("Type")
-                        .HasColumnType("int");
+                    b.Property<string>("Type")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -500,10 +519,6 @@ namespace Database.Migrations
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityRole");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasDiscriminator().HasValue("ApplicationRole");
                 });
 
@@ -602,6 +617,17 @@ namespace Database.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("Database.Entities.Votes.CommentReplyVote", b =>
+                {
+                    b.HasOne("Database.Entities.Comments.CommentReply", "CommentReply")
+                        .WithMany("Votes")
+                        .HasForeignKey("CommentReplyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CommentReply");
+                });
+
             modelBuilder.Entity("Database.Entities.Votes.CommentVote", b =>
                 {
                     b.HasOne("Database.Entities.Comments.Comment", "Comment")
@@ -609,10 +635,6 @@ namespace Database.Migrations
                         .HasForeignKey("CommentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("Database.Entities.Comments.CommentReply", null)
-                        .WithMany("Votes")
-                        .HasForeignKey("CommentReplyId");
 
                     b.HasOne("Database.Entities.Identity.ApplicationUser", "User")
                         .WithMany()

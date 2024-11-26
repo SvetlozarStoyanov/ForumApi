@@ -1,6 +1,6 @@
 ﻿using Database.Entities.Identity;
 using Models.Common;
-using Models.DTOs.Subforums;
+using Models.DTOs.Subforums.Input;
 
 namespace Contracts.Services.Entity.Subforums
 {

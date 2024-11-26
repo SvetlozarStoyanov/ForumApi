@@ -3,7 +3,7 @@ using Contracts.Services.Entity.Users;
 using Microsoft.EntityFrameworkCore;
 using Models.Common.Enums;
 using Models.Common;
-using Models.DTOs.Users;
+using Models.DTOs.Users.Output;
 
 namespace Services.Entity.ApplicationUsers
 {

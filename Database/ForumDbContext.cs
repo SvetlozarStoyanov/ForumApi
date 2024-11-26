@@ -24,6 +24,7 @@ namespace Database
         public DbSet<CommentReply> CommentReplies { get; set; }
         public DbSet<PostVote> PostVotes { get; set; }
         public DbSet<CommentVote> CommentVotes { get; set; }
+        public DbSet<CommentReplyVote> CommentReplyVotes { get; set; }
         public DbSet<Subforum> Subforums { get; set; }
         public DbSet<UserSubforum> UsersSubforums { get; set; }
         public DbSet<AdminSubforum> AdminsSubforums { get; set; }
@@ -65,6 +66,18 @@ namespace Database
             
             builder.Entity<CommentReply>()
                 .Property(x => x.Status)
+                .HasConversion<string>();            
+            
+            builder.Entity<PostVote>()
+                .Property(x => x.Type)
+                .HasConversion<string>();            
+            
+            builder.Entity<CommentVote>()
+                .Property(x => x.Type)
+                .HasConversion<string>();           
+            
+            builder.Entity<CommentReplyVote>()
+                .Property(x => x.Type)
                 .HasConversion<string>();
 
             builder.Entity<ApplicationUser>()

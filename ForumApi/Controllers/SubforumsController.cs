@@ -2,7 +2,7 @@
 using ForumApi.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Models.DTOs.Subforums;
+using Models.DTOs.Subforums.Input;
 
 namespace ForumApi.Controllers
 {

@@ -15,6 +15,6 @@ namespace Database.Entities.Comments
         public ApplicationUser User { get; set; }
         public long CommentId { get; set; }
         public Comment Comment { get; set; }
-        public ICollection<CommentVote> Votes { get; set; }
+        public ICollection<CommentReplyVote> Votes { get; set; }
     }
 }

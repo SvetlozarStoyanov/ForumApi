@@ -7,7 +7,7 @@ using Database.Entities.Posts;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Models.Common;
 using Models.Common.Enums;
-using Models.DTOs.CommentReplies;
+using Models.DTOs.CommentReplies.Input;
 using Models.DTOs.Comments;
 using Services.Entity.Comments;
 using System.ComponentModel.Design;

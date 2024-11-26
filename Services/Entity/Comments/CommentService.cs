@@ -6,7 +6,7 @@ using Database.Entities.Posts;
 using Database.Enums.Statuses;
 using Models.Common;
 using Models.Common.Enums;
-using Models.DTOs.Comments;
+using Models.DTOs.Comments.Input;
 
 namespace Services.Entity.Comments
 {

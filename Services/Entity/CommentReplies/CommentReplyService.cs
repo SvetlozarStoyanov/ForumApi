@@ -5,7 +5,7 @@ using Database.Entities.Identity;
 using Database.Enums.Statuses;
 using Models.Common;
 using Models.Common.Enums;
-using Models.DTOs.CommentReplies;
+using Models.DTOs.CommentReplies.Input;
 
 namespace Services.Entity.CommentReplies
 {

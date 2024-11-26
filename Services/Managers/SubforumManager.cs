@@ -4,7 +4,7 @@ using Contracts.Services.Entity.Users;
 using Contracts.Services.Managers;
 using Models.Common;
 using Models.Common.Enums;
-using Models.DTOs.Subforums;
+using Models.DTOs.Subforums.Input;
 
 namespace Services.Managers
 {

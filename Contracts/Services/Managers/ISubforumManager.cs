@@ -1,5 +1,5 @@
 ﻿using Models.Common;
-using Models.DTOs.Subforums;
+using Models.DTOs.Subforums.Input;
 
 namespace Contracts.Services.Managers
 {
