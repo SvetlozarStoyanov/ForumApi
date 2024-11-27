@@ -10,6 +10,8 @@ namespace Contracts.Services.Entity.Posts
     {
         Task<IEnumerable<PostListDto>> GetHomePagePostsForGuestUserAsync();
 
+        Task<OperationResult<PostDetailsDto>> GetPostDetailsByIdAsync(long id);
+
         Task CreatePostAsync(PostCreateDto postCreateDto,
             ApplicationUser user,
             Subforum subforum);

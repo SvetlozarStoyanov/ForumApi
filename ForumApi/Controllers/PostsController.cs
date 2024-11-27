@@ -28,6 +28,21 @@ namespace ForumApi.Controllers
             return Ok(posts);
         }
 
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("details/{id}")]
+        public async Task<IActionResult> Details([FromRoute] long id)
+        {
+            var operationResult = await postManager.GetPostDetailsByIdAsync(id);
+
+            if (!operationResult.IsSuccessful)
+            {
+                return this.Error(operationResult);
+            }
+
+            return Ok(operationResult.Data);
+        }
+
 
         [HttpPost]
         [Route("create")]

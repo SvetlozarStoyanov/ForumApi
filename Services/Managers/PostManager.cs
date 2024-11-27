@@ -20,6 +20,16 @@ namespace Services.Managers
             this.postService = postService;
         }
 
+        public async Task<IEnumerable<PostListDto>> GetHomePagePostsForGuestUserAsync()
+        {
+            return await postService.GetHomePagePostsForGuestUserAsync();
+        }
+
+        public async Task<OperationResult<PostDetailsDto>> GetPostDetailsByIdAsync(long id)
+        {
+            return await postService.GetPostDetailsByIdAsync(id);
+        }
+
         public async Task<OperationResult> CreatePostAsync(string userId, PostCreateDto postCreateDto)
         {
             var operationResult = new OperationResult();
@@ -99,9 +109,5 @@ namespace Services.Managers
             return operationResult;
         }
 
-        public async Task<IEnumerable<PostListDto>> GetHomePagePostsForGuestUserAsync()
-        {
-            return await postService.GetHomePagePostsForGuestUserAsync();
-        }
     }
 }
