@@ -55,6 +55,31 @@ namespace Services.Entity.Posts
         }
 
         public async Task<IEnumerable<PostListDto>> GetSubforumPostsAsync(long subforumId)
+        {
+            var posts = await unitOfWork.PostRepository
+                .FindByConditionAsNoTracking(x => x.SubforumId == subforumId)
+                .Select(x => new PostListDto()
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Text = x.Text,
+                    VoteTally = x.Votes.Where(x => x.Type == PostVotes.Up).Count() - x.Votes.Where(x => x.Type == PostVotes.Down).Count(),
+                    User = new UserMinInfoDto()
+                    {
+                        Id = x.UserId,
+                        Username = x.User.UserName!
+                    },
+                    Subforum = new SubforumMinInfoDto()
+                    {
+                        Id = x.SubforumId,
+                        Name = x.Subforum.Name
+                    },
+                    CommentCount = x.Comments.Count + x.Comments.SelectMany(c => c.Replies).Count()
+                })
+                .ToListAsync();
+
+            return posts;
+        }
 
         public async Task<OperationResult<PostDetailsDto>> GetPostDetailsByIdAsync(long id)
         {
@@ -183,6 +208,5 @@ namespace Services.Entity.Posts
 
             return operationResult;
         }
-
     }
 }

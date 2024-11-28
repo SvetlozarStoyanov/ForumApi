@@ -1,4 +1,5 @@
 ﻿using Contracts.Services.Managers;
+using Database.Enums.Votes;
 using ForumApi.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -60,9 +61,37 @@ namespace ForumApi.Controllers
 
         [HttpPut]
         [Route("update/{id}")]
-        public async Task<IActionResult> CreatePost([FromRoute] long id, PostUpdateDto postUpdateDto)
+        public async Task<IActionResult> UpdatePost([FromRoute] long id, PostUpdateDto postUpdateDto)
         {
             var operationResult = await postManager.UpdatePostAsync(id, User.GetId(), postUpdateDto);
+
+            if (!operationResult.IsSuccessful)
+            {
+                return this.Error(operationResult);
+            }
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("upvote/{id}")]
+        public async Task<IActionResult> UpvotePost([FromRoute] long id)
+        {
+            var operationResult = await postManager.VoteOnPostAsync(id, User.GetId(), PostVotes.Up);
+
+            if (!operationResult.IsSuccessful)
+            {
+                return this.Error(operationResult);
+            }
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("downvote/{id}")]
+        public async Task<IActionResult> DownvotePost([FromRoute] long id)
+        {
+            var operationResult = await postManager.VoteOnPostAsync(id, User.GetId(), PostVotes.Down);
 
             if (!operationResult.IsSuccessful)
             {

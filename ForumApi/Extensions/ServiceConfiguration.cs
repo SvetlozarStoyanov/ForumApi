@@ -4,6 +4,7 @@ using Contracts.Services.Entity.Comments;
 using Contracts.Services.Entity.Posts;
 using Contracts.Services.Entity.Subforums;
 using Contracts.Services.Entity.Users;
+using Contracts.Services.Entity.Votes;
 using Contracts.Services.JWT;
 using Contracts.Services.Managers;
 using Contracts.Services.Seeding;
@@ -15,6 +16,7 @@ using Services.Entity.CommentReplies;
 using Services.Entity.Comments;
 using Services.Entity.Posts;
 using Services.Entity.Subforums;
+using Services.Entity.Votes;
 using Services.JWT;
 using Services.Managers;
 using Services.Seeding;
@@ -54,6 +56,7 @@ namespace ForumApi.Extensions
             services.AddScoped<IPostService, PostService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<ICommentReplyService, CommentReplyService>();
+            services.AddScoped<IPostVoteService, PostVoteService>();
         }
 
         private static void AddManagers(IServiceCollection services)

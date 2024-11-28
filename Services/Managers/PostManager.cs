@@ -1,7 +1,11 @@
 ﻿using Contracts.DataAccess.UnitOfWork;
 using Contracts.Services.Entity.Posts;
+using Contracts.Services.Entity.Votes;
 using Contracts.Services.Managers;
+using Database.Entities.Posts;
 using Database.Entities.Subforums;
+using Database.Enums.Votes;
+using Microsoft.EntityFrameworkCore;
 using Models.Common;
 using Models.Common.Enums;
 using Models.DTOs.Posts.Input;
@@ -13,11 +17,13 @@ namespace Services.Managers
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IPostService postService;
+        private readonly IPostVoteService postVoteService;
 
-        public PostManager(IUnitOfWork unitOfWork, IPostService postService)
+        public PostManager(IUnitOfWork unitOfWork, IPostService postService, IPostVoteService postVoteService)
         {
             this.unitOfWork = unitOfWork;
             this.postService = postService;
+            this.postVoteService = postVoteService;
         }
 
         public async Task<IEnumerable<PostListDto>> GetHomePagePostsForGuestUserAsync()
@@ -109,5 +115,34 @@ namespace Services.Managers
             return operationResult;
         }
 
+        public async Task<OperationResult> VoteOnPostAsync(long postId, string userId, PostVotes type)
+        {
+            var operationResult = new OperationResult();
+
+            var user = await unitOfWork.UserRepository.GetByIdAsync(userId);
+
+            if (user is null)
+            {
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
+                return operationResult;
+            }
+
+            var post = await unitOfWork.PostRepository
+                .FindByCondition(x => x.Id == postId)
+                .Include(x => x.Votes)
+                .FirstOrDefaultAsync();
+
+            if (post is null)
+            {
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"{nameof(Post)} with id: {postId} was not found!"));
+                return operationResult;
+            }
+
+            postVoteService.VoteOnPost(type, post, user);
+
+            await unitOfWork.SaveChangesAsync();
+
+            return operationResult;
+        }
     }
 }
