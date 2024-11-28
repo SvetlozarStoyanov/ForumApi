@@ -619,7 +619,7 @@ namespace Database.Migrations
                     b.HasOne("Database.Entities.Comments.CommentReply", "CommentReply")
                         .WithMany("Votes")
                         .HasForeignKey("CommentReplyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("CommentReply");

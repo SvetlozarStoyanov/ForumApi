@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Database.Migrations
 {
     [DbContext(typeof(ForumDbContext))]
-    [Migration("20241126183632_Initial")]
+    [Migration("20241128143441_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -622,7 +622,7 @@ namespace Database.Migrations
                     b.HasOne("Database.Entities.Comments.CommentReply", "CommentReply")
                         .WithMany("Votes")
                         .HasForeignKey("CommentReplyId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("CommentReply");

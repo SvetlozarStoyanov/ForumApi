@@ -399,7 +399,7 @@ namespace Database.Migrations
                         column: x => x.CommentReplyId,
                         principalTable: "CommentReplies",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(

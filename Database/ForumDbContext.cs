@@ -99,6 +99,22 @@ namespace Database
             builder.Entity<CommentReply>()
                 .HasQueryFilter(x => x.Status == EntityStatus.Active);
 
+
+            builder.Entity<PostVote>()
+                .HasOne(x => x.Post)
+                .WithMany(x => x.Votes)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<CommentVote>()
+                .HasOne(x => x.Comment)
+                .WithMany(x => x.Votes)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<CommentReplyVote>()
+                .HasOne(x => x.CommentReply)
+                .WithMany(x => x.Votes)
+                .OnDelete(DeleteBehavior.Restrict);
+
             base.OnModelCreating(builder);
         }
     }
