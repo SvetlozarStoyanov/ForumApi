@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Models.Common;
 using Models.Common.Enums;
 using Models.DTOs.Subforums.Input;
+using Models.DTOs.Subforums.Output;
 
 namespace Services.Entity.Subforums
 {
@@ -30,6 +31,32 @@ namespace Services.Entity.Subforums
             };
 
             await unitOfWork.SubForumRepository.AddAsync(subforum);
+
+            return operationResult;
+        }
+
+        public async Task<OperationResult<SubforumDetailsDto>> GetSubforumByNameAsync(string name)
+        {
+            var operationResult = new OperationResult<SubforumDetailsDto>();
+
+            var subforum = await unitOfWork.SubForumRepository.FindByConditionAsNoTracking(x => x.Name.ToLower().Replace(" ", "") == name.ToLower().Replace(" ", ""))
+                .Select(x => new SubforumDetailsDto()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                })
+                .FirstOrDefaultAsync();
+
+            if (subforum is null)
+            {
+                if (subforum is null)
+                {
+                    operationResult.AddError(new Error(ErrorTypes.NotFound, $"{nameof(Subforum)} with name: {name} was not found!"));
+                    return operationResult;
+                }
+            }
+
+            operationResult.Data = subforum;
 
             return operationResult;
         }

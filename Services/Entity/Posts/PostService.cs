@@ -54,6 +54,7 @@ namespace Services.Entity.Posts
             return posts;
         }
 
+        public async Task<IEnumerable<PostListDto>> GetSubforumPostsAsync(long subforumId)
 
         public async Task<OperationResult<PostDetailsDto>> GetPostDetailsByIdAsync(long id)
         {

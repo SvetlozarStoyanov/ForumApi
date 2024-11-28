@@ -18,6 +18,21 @@ namespace ForumApi.Controllers
             this.subforumManager = subforumManager;
         }
 
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("details/{name}")]
+        public async Task<IActionResult> GetSubforumByNameAsync([FromRoute]string name)
+        {
+            var operationResult = await subforumManager.GetSubforumByNameAsync(name);
+
+            if (!operationResult.IsSuccessful)
+            {
+                return this.Error(operationResult);
+            }
+
+            return Ok(operationResult.Data);
+        }
+
         [HttpPost]
         [Route("create")]
         public async Task<IActionResult> CreateSubforum(SubforumCreateDto subforumCreateDto)

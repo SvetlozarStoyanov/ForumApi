@@ -1,23 +1,49 @@
 ﻿using Contracts.DataAccess.UnitOfWork;
+using Contracts.Services.Entity.Posts;
 using Contracts.Services.Entity.Subforums;
-using Contracts.Services.Entity.Users;
 using Contracts.Services.Managers;
 using Models.Common;
 using Models.Common.Enums;
 using Models.DTOs.Subforums.Input;
+using Models.DTOs.Subforums.Output;
 
 namespace Services.Managers
 {
     public class SubforumManager : ISubforumManager
     {
-        private readonly ISubforumService subforumService;
         private readonly IUnitOfWork unitOfWork;
+        private readonly ISubforumService subforumService;
+        private readonly IPostService postService;
 
-        public SubforumManager(ISubforumService subforumService,
-            IUnitOfWork unitOfWork)
+        public SubforumManager(IUnitOfWork unitOfWork,
+            ISubforumService subforumService,
+            IPostService postService)
         {
-            this.subforumService = subforumService;
             this.unitOfWork = unitOfWork;
+            this.subforumService = subforumService;
+            this.postService = postService;
+        }
+
+        public async Task<OperationResult<SubforumDetailsDto>> GetSubforumByNameAsync(string name)
+        {
+            var operationResult = new OperationResult<SubforumDetailsDto>();
+            var fetchSubforumByNameResult = await subforumService.GetSubforumByNameAsync(name);
+
+            if (!fetchSubforumByNameResult.IsSuccessful)
+            {
+                operationResult.AppendErrors(fetchSubforumByNameResult);
+                return operationResult;
+            }
+
+            var subforum = fetchSubforumByNameResult.Data;
+
+            var subforumPosts = await postService.GetSubforumPostsAsync(subforum.Id);
+
+            subforum.Posts = subforumPosts;
+
+            operationResult.Data = subforum;
+            
+            return operationResult;
         }
 
         public async Task<OperationResult> CreateSubforumAsync(string userId, SubforumCreateDto subforumCreateDto)
