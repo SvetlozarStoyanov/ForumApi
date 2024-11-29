@@ -57,6 +57,8 @@ namespace ForumApi.Extensions
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<ICommentReplyService, CommentReplyService>();
             services.AddScoped<IPostVoteService, PostVoteService>();
+            services.AddScoped<ICommentVoteService, CommentVoteService>();
+            services.AddScoped<ICommentReplyVoteService, CommentReplyVoteService>();
         }
 
         private static void AddManagers(IServiceCollection services)
