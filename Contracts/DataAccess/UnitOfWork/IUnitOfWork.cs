@@ -16,6 +16,7 @@ namespace Contracts.DataAccess.UnitOfWork
         ISubForumRepository SubForumRepository { get; }
         IPostVoteRepository PostVoteRepository { get; }
         ICommentVoteRepository CommentVoteRepository { get; }
+        ICommentReplyVoteRepository CommentReplyVoteRepository { get; }
 
         #endregion
 
