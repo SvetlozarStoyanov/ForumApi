@@ -149,16 +149,19 @@ namespace Services.Seeding
                             {
                                 User = users[2],
                                 Type = PostVotes.Up,
+                                CreatedOn = DateTime.UtcNow.AddDays(-2)
                             },
                             new PostVote()
                             {
                                 User = users[3],
                                 Type = PostVotes.Up,
+                                CreatedOn = DateTime.UtcNow.AddDays(-2)
                             },
                             new PostVote()
                             {
                                 User = users[4],
                                 Type = PostVotes.Down,
+                                CreatedOn = DateTime.UtcNow.AddDays(-2)
                             },
                         },
                         Comments = new List<Comment>()
@@ -216,16 +219,19 @@ namespace Services.Seeding
                             {
                                 User = users[11],
                                 Type = PostVotes.Up,
+                                CreatedOn = DateTime.UtcNow.AddDays(-2)
                             },
                             new PostVote()
                             {
                                 User = users[16],
                                 Type = PostVotes.Down,
+                                CreatedOn = DateTime.UtcNow.AddDays(-2)
                             },
                             new PostVote()
                             {
                                 User = users[18],
                                 Type = PostVotes.Down,
+                                CreatedOn = DateTime.UtcNow.AddDays(-2)
                             },
                         },
                         Comments = new List<Comment>()
