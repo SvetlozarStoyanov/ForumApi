@@ -25,6 +25,7 @@ namespace DataAccess.UnitOfWork
         private ISubForumRepository subForumRepository;
         private ICommentVoteRepository commentVoteRepository;
         private IPostVoteRepository postVoteRepository;
+        private ICommentReplyVoteRepository commentReplyVoteRepository;
         #endregion
 
         public UnitOfWork(ForumDbContext context)
@@ -46,6 +47,8 @@ namespace DataAccess.UnitOfWork
         public IPostVoteRepository PostVoteRepository => postVoteRepository ??= new PostVoteRepository(context);
 
         public ICommentVoteRepository CommentVoteRepository => commentVoteRepository ??= new CommentVoteRepository(context);
+
+        public ICommentReplyVoteRepository CommentReplyVoteRepository => commentReplyVoteRepository ??= new CommentReplyVoteRepository(context);
 
         #endregion
         public async Task<int> SaveChangesAsync()
