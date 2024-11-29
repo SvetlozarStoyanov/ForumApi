@@ -1,4 +1,5 @@
-﻿using Models.Common;
+﻿using Database.Enums.Votes;
+using Models.Common;
 using Models.DTOs.Comments.Input;
 
 namespace Contracts.Services.Managers
@@ -11,6 +12,8 @@ namespace Contracts.Services.Managers
         Task<OperationResult> UpdateCommentAsync(long commentId,
             string userId,
             CommentUpdateDto commentUpdateDto);
+
+        Task<OperationResult> VoteOnCommentAsync(long commentId, string userId, CommentVotes type);
 
         Task<OperationResult> DeleteCommentAsync(long commentId, string userId);
     }

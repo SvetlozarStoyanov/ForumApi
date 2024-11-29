@@ -1,4 +1,5 @@
 ﻿using Contracts.Services.Managers;
+using Database.Enums.Votes;
 using ForumApi.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -42,6 +43,34 @@ namespace ForumApi.Controllers
             {
                 return this.Error(operationResult);
             }
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("upvote/{id}")]
+        public async Task<IActionResult> UpvoteComment([FromRoute] long id)
+        {
+            var operationResult = await commentManager.VoteOnCommentAsync(id, User.GetId(), CommentVotes.Up);
+
+            if (!operationResult.IsSuccessful)
+            {
+                return this.Error(operationResult);
+            }
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("downvote/{id}")]
+        public async Task<IActionResult> DownvoteComment([FromRoute] long id)
+        {
+            var operationResult = await commentManager.VoteOnCommentAsync(id, User.GetId(), CommentVotes.Down);
+
+            if (!operationResult.IsSuccessful)
+            {
+                return this.Error(operationResult);
+            }
+
             return Ok();
         }
 

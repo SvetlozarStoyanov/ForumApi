@@ -1,11 +1,14 @@
 ﻿using Contracts.DataAccess.UnitOfWork;
 using Contracts.Services.Entity.Comments;
+using Contracts.Services.Entity.Votes;
 using Contracts.Services.Managers;
+using Database.Entities.Comments;
 using Database.Entities.Posts;
+using Database.Enums.Votes;
+using Microsoft.EntityFrameworkCore;
 using Models.Common;
 using Models.Common.Enums;
 using Models.DTOs.Comments.Input;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Services.Managers
 {
@@ -13,11 +16,15 @@ namespace Services.Managers
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly ICommentService commentService;
+        private readonly ICommentVoteService commentVoteService;
 
-        public CommentManager(IUnitOfWork unitOfWork, ICommentService commentService)
+        public CommentManager(IUnitOfWork unitOfWork,
+            ICommentService commentService,
+            ICommentVoteService commentVoteService)
         {
             this.unitOfWork = unitOfWork;
             this.commentService = commentService;
+            this.commentVoteService = commentVoteService;
         }
 
         public async Task<OperationResult> CreateCommentAsync(string userId, CommentCreateDto commentCreateDto)
@@ -72,6 +79,29 @@ namespace Services.Managers
             return operationResult;
         }
 
+        public async Task<OperationResult> VoteOnCommentAsync(long commentId, string userId, CommentVotes type)
+        {
+            var operationResult = new OperationResult();
+
+            var comment = await unitOfWork.CommentRepository.FindByCondition(x => x.Id == commentId)
+                .Include(x => x.Votes)
+                .FirstOrDefaultAsync();
+
+            if (comment is null)
+            {
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"{nameof(Comment)} with id: {commentId} was not found!"));
+                return operationResult;
+            }
+
+            var user = await unitOfWork.UserRepository.GetByIdAsync(userId);
+
+            commentVoteService.VoteOnComment(type, comment, user);
+
+            await unitOfWork.SaveChangesAsync();
+
+            return operationResult;
+        }
+
         public async Task<OperationResult> DeleteCommentAsync(long commentId, string userId)
         {
             var operationResult = new OperationResult();
@@ -96,5 +126,7 @@ namespace Services.Managers
 
             return operationResult;
         }
+
+
     }
 }
