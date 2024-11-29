@@ -17,7 +17,7 @@ namespace Services.Entity.Votes
             this.unitOfWork = unitOfWork;
         }
 
-        public async void VoteOnPost(PostVotes type, Post post, ApplicationUser user)
+        public void VoteOnPost(PostVotes type, Post post, ApplicationUser user)
         {
             var operationResult = new OperationResult();
 

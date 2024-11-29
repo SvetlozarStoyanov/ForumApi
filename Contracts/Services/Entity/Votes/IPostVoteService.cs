@@ -6,6 +6,6 @@ namespace Contracts.Services.Entity.Votes
 {
     public interface IPostVoteService
     {
-        void VoteOnPost(PostVotes type, Post post, ApplicationUser applicationUser);
+        void VoteOnPost(PostVotes type, Post post, ApplicationUser user);
     }
 }
