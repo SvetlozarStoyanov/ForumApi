@@ -1,16 +1,13 @@
 ﻿using Contracts.DataAccess.UnitOfWork;
 using Contracts.Services.Entity.CommentReplies;
-using Contracts.Services.Entity.Comments;
+using Contracts.Services.Entity.Votes;
 using Contracts.Services.Managers;
 using Database.Entities.Comments;
-using Database.Entities.Posts;
-using Microsoft.EntityFrameworkCore.Metadata;
+using Database.Enums.Votes;
+using Microsoft.EntityFrameworkCore;
 using Models.Common;
 using Models.Common.Enums;
 using Models.DTOs.CommentReplies.Input;
-using Models.DTOs.Comments;
-using Services.Entity.Comments;
-using System.ComponentModel.Design;
 
 namespace Services.Managers
 {
@@ -18,11 +15,15 @@ namespace Services.Managers
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly ICommentReplyService commentReplyService;
+        private readonly ICommentReplyVoteService commentReplyVoteService;
 
-        public CommentReplyManager(IUnitOfWork unitOfWork, ICommentReplyService commentReplyService)
+        public CommentReplyManager(IUnitOfWork unitOfWork,
+            ICommentReplyService commentReplyService,
+            ICommentReplyVoteService commentReplyVoteService)
         {
             this.unitOfWork = unitOfWork;
             this.commentReplyService = commentReplyService;
+            this.commentReplyVoteService = commentReplyVoteService;
         }
 
         public async Task<OperationResult> CreateCommentReplyAsync(string userId,
@@ -64,6 +65,7 @@ namespace Services.Managers
                 operationResult.AddError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
                 return operationResult;
             }
+
             var updateCommentReplyResult = await commentReplyService.UpdateCommentReplyAsync(commentReplyId, userId, commentReplyUpdateDto);
 
             if (!updateCommentReplyResult.IsSuccessful)
@@ -71,6 +73,35 @@ namespace Services.Managers
                 operationResult.AppendErrors(updateCommentReplyResult);
                 return operationResult;
             }
+
+            await unitOfWork.SaveChangesAsync();
+
+            return operationResult;
+        }
+
+        public async Task<OperationResult> VoteOnCommentReplyAsync(long commentReplyId, string userId, CommentReplyVotes type)
+        {
+            var operationResult = new OperationResult();
+            
+            var commentReply = await unitOfWork.CommentReplyRepository.FindByCondition(x => x.Id == commentReplyId)
+                .Include(x => x.Votes)
+                .FirstOrDefaultAsync();
+
+            if (commentReply is null)
+            {
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"{nameof(CommentReply)} with id: {commentReplyId} was not found!"));
+                return operationResult;
+            }
+
+            var user = await unitOfWork.UserRepository.GetByIdAsync(userId);
+
+            if (user is null)
+            {
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
+                return operationResult;
+            }
+
+            commentReplyVoteService.VoteOnCommentReply(type, commentReply, user);
 
             await unitOfWork.SaveChangesAsync();
 

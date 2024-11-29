@@ -1,4 +1,5 @@
 ﻿using Contracts.Services.Managers;
+using Database.Enums.Votes;
 using ForumApi.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,7 +36,7 @@ namespace ForumApi.Controllers
 
         [HttpPut]
         [Route("update/{id}")]
-        public async Task<IActionResult> UpdateComment([FromRoute] long id, CommentReplyUpdateDto commentUpdateDto)
+        public async Task<IActionResult> UpdateCommentReply([FromRoute] long id, CommentReplyUpdateDto commentUpdateDto)
         {
             var operationResult = await commentReplyManager.UpdateCommentReplyAsync(id, User.GetId(), commentUpdateDto);
 
@@ -46,9 +47,37 @@ namespace ForumApi.Controllers
             return Ok();
         }
 
+        [HttpPost]
+        [Route("upvote/{id}")]
+        public async Task<IActionResult> UpvoteCommentReply([FromRoute] long id)
+        {
+            var operationResult = await commentReplyManager.VoteOnCommentReplyAsync(id, User.GetId(), CommentReplyVotes.Up);
+            
+            if (!operationResult.IsSuccessful)
+            {
+                return this.Error(operationResult);
+            }
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("downvote/{id}")]
+        public async Task<IActionResult> DownvoteCommentReply([FromRoute] long id)
+        {
+            var operationResult = await commentReplyManager.VoteOnCommentReplyAsync(id, User.GetId(), CommentReplyVotes.Down);
+
+            if (!operationResult.IsSuccessful)
+            {
+                return this.Error(operationResult);
+            }
+
+            return Ok();
+        }
+
         [HttpDelete]
         [Route("delete/{id}")]
-        public async Task<IActionResult> DeleteComment([FromRoute] long id)
+        public async Task<IActionResult> DeleteCommentReply([FromRoute] long id)
         {
             var operationResult = await commentReplyManager.DeleteCommentReplyAsync(id, User.GetId());
 
