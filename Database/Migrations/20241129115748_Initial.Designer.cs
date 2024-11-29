@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Database.Migrations
 {
     [DbContext(typeof(ForumDbContext))]
-    [Migration("20241128143441_Initial")]
+    [Migration("20241129115748_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -303,13 +303,22 @@ namespace Database.Migrations
                     b.Property<long>("CommentReplyId")
                         .HasColumnType("bigint");
 
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CommentReplyId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("CommentReplyVotes");
                 });
@@ -352,6 +361,9 @@ namespace Database.Migrations
                         .HasColumnType("bigint");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<long>("PostId")
                         .HasColumnType("bigint");
@@ -625,7 +637,15 @@ namespace Database.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("Database.Entities.Identity.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("CommentReply");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Database.Entities.Votes.CommentVote", b =>
