@@ -62,7 +62,7 @@ namespace ForumApi.Controllers
                 Expires = DateTime.UtcNow.AddDays(1)
             });
 
-            return Ok(new { Username = user.UserName, Email = user.Email });
+            return Ok(new { Id = user.Id, Username = user.UserName });
         }
 
         [AllowAnonymous]
@@ -107,7 +107,18 @@ namespace ForumApi.Controllers
                 Expires = DateTime.UtcNow.AddDays(1)
             });
 
-            return Ok(new { token });
+            return Ok(new { Id = user.Id, Username = user.UserName });
+        }
+
+        [HttpPost]
+        [Route("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            if (Request.Cookies["jwt"] != null)
+            {
+                Response.Cookies.Delete("jwt");
+            }
+            return Ok();
         }
 
         [HttpPost]
