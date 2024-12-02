@@ -84,22 +84,25 @@ namespace Services.Entity.Posts
         public async Task<OperationResult<PostDetailsDto>> GetPostDetailsByIdAsync(long id)
         {
             var operationResult = new OperationResult<PostDetailsDto>();
-            var post = await unitOfWork.PostRepository.FindByConditionAsNoTracking(x => x.Id == id)
+            var postDetails = await unitOfWork.PostRepository.FindByConditionAsNoTracking(x => x.Id == id)
                 .Select(x => new PostDetailsDto()
                 {
-                    Id = x.Id,
-                    Title = x.Title,
-                    Text = x.Text,
-                    VoteTally = x.Votes.Count(x => x.Type == PostVotes.Up) - x.Votes.Count(x => x.Type == PostVotes.Down),
-                    User = new UserMinInfoDto()
+                    Post = new PostListDto()
                     {
-                        Id = x.UserId,
-                        Username = x.User.UserName!
-                    },
-                    Subforum = new SubforumMinInfoDto()
-                    {
-                        Id = x.SubforumId,
-                        Name = x.Subforum.Name
+                        Id = x.Id,
+                        Title = x.Title,
+                        Text = x.Text,
+                        VoteTally = x.Votes.Count(x => x.Type == PostVotes.Up) - x.Votes.Count(x => x.Type == PostVotes.Down),
+                        User = new UserMinInfoDto()
+                        {
+                            Id = x.UserId,
+                            Username = x.User.UserName!
+                        },
+                        Subforum = new SubforumMinInfoDto()
+                        {
+                            Id = x.SubforumId,
+                            Name = x.Subforum.Name
+                        },
                     },
                     Comments = x.Comments.Select(y => new CommentListDto()
                     {
@@ -127,15 +130,15 @@ namespace Services.Entity.Posts
                 .FirstOrDefaultAsync();
 
 
-            if (post is null)
+            if (postDetails is null)
             {
                 operationResult.AddError(new Error(ErrorTypes.NotFound, $"{nameof(Post)} with id: {id} was not found!"));
                 return operationResult;
             }
 
-            post.CommentCount = post.Comments.Count() + post.Comments.SelectMany(x => x.Replies).Count();
+            postDetails.Post.CommentCount = postDetails.Comments.Count() + postDetails.Comments.SelectMany(x => x.Replies).Count();
 
-            operationResult.Data = post;
+            operationResult.Data = postDetails;
 
             return operationResult;
         }
