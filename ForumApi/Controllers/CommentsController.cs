@@ -19,6 +19,22 @@ namespace ForumApi.Controllers
             this.commentManager = commentManager;
         }
 
+
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("post-comments/{postId}")]
+        public async Task<IActionResult> GetPostComments([FromRoute] long postId)
+        {
+            var operationResult = await commentManager.GetPostCommentsAsync(postId, User.GetId());
+
+            if (!operationResult.IsSuccessful)
+            {
+                return this.Error(operationResult);
+            }
+
+            return Ok(operationResult.Data);
+        }
+
         [HttpPost]
         [Route("create")]
         public async Task<IActionResult> CreateComment(CommentCreateDto commentCreateDto)

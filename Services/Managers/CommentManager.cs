@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Models.Common;
 using Models.Common.Enums;
 using Models.DTOs.Comments.Input;
+using Models.DTOs.Comments.Output;
 
 namespace Services.Managers
 {
@@ -25,6 +26,37 @@ namespace Services.Managers
             this.unitOfWork = unitOfWork;
             this.commentService = commentService;
             this.commentVoteService = commentVoteService;
+        }
+
+        public async Task<OperationResult<IEnumerable<CommentListDto>>> GetPostCommentsAsync(long postId, string? userId)
+        {
+            var operationResult = new OperationResult<IEnumerable<CommentListDto>>();
+
+            var post = await unitOfWork.PostRepository.GetByIdAsync(postId);
+
+            if (post is null)
+            {
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"{nameof(Post)} with id: {postId} was not found!"));
+                return operationResult;
+            }
+
+            if (userId is not null)
+            {
+                var user = await unitOfWork.UserRepository.GetByIdAsync(userId);
+
+                if (user is null)
+                {
+                    operationResult.AddError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
+                    return operationResult;
+                }
+            }
+
+            var postComments = userId is not null ? await commentService.GetPostCommentsAsync(postId, userId) :
+                await commentService.GetPostCommentsForGuestUserAsync(postId);
+
+            operationResult.Data = postComments;
+
+            return operationResult;
         }
 
         public async Task<OperationResult> CreateCommentAsync(string userId, CommentCreateDto commentCreateDto)
@@ -126,7 +158,5 @@ namespace Services.Managers
 
             return operationResult;
         }
-
-
     }
 }

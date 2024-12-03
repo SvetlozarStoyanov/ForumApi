@@ -4,9 +4,16 @@ using Database.Entities.Comments;
 using Database.Entities.Identity;
 using Database.Entities.Posts;
 using Database.Enums.Statuses;
+using Database.Enums.Votes;
+using Microsoft.EntityFrameworkCore;
 using Models.Common;
 using Models.Common.Enums;
+using Models.DTOs.CommentReplies.Output;
 using Models.DTOs.Comments.Input;
+using Models.DTOs.Comments.Output;
+using Models.DTOs.Users.Output;
+using Models.DTOs.Votes.Output;
+using Models.Enums.Votes;
 
 namespace Services.Entity.Comments
 {
@@ -17,6 +24,81 @@ namespace Services.Entity.Comments
         public CommentService(IUnitOfWork unitOfWork)
         {
             this.unitOfWork = unitOfWork;
+        }
+
+        public async Task<IEnumerable<CommentListDto>> GetPostCommentsForGuestUserAsync(long postId)
+        {
+            var postComments = await unitOfWork.CommentRepository
+                .FindByConditionAsNoTracking(x => x.PostId == postId)
+                .Select(x => new CommentListDto()
+                {
+                    Id = x.Id,
+                    Text = x.Text,
+                    User = new UserMinInfoDto()
+                    {
+                        Id = x.UserId,
+                        Username = x.User.UserName!
+                    },
+                    VoteTally = x.Votes.Count(x => x.Type == CommentVotes.Up) - x.Votes.Count(x => x.Type == CommentVotes.Down),
+                    Replies = x.Replies.Select(z => new CommentReplyListDto()
+                    {
+                        Id = z.Id,
+                        Text = z.Text,
+                        VoteTally = z.Votes.Count(x => x.Type == CommentReplyVotes.Up) - z.Votes.Count(x => x.Type == CommentReplyVotes.Down),
+                        User = new UserMinInfoDto()
+                        {
+                            Id = z.UserId,
+                            Username = z.User.UserName!
+                        },
+
+                    }),
+                })
+                .ToListAsync();
+
+            return postComments;
+        }
+
+        public async Task<IEnumerable<CommentListDto>> GetPostCommentsAsync(long postId, string? userId)
+        {
+            var postComments = await unitOfWork.CommentRepository
+                .FindByConditionAsNoTracking(x => x.PostId == postId)
+                .Select(x => new CommentListDto()
+                {
+                    Id = x.Id,
+                    Text = x.Text,
+                    User = new UserMinInfoDto()
+                    {
+                        Id = x.UserId,
+                        Username = x.User.UserName!
+                    },
+                    VoteTally = x.Votes.Count(x => x.Type == CommentVotes.Up) - x.Votes.Count(x => x.Type == CommentVotes.Down),
+                    Replies = x.Replies.Select(z => new CommentReplyListDto()
+                    {
+                        Id = z.Id,
+                        Text = z.Text,
+                        VoteTally = z.Votes.Count(x => x.Type == CommentReplyVotes.Up) - z.Votes.Count(x => x.Type == CommentReplyVotes.Down),
+                        User = new UserMinInfoDto()
+                        {
+                            Id = z.UserId,
+                            Username = z.User.UserName!
+                        },
+                        UserVote = new UserVoteDto()
+                        {
+                            VoteType = z.Votes.Any(z => z.Type == CommentReplyVotes.Up && z.UserId == userId) ? VoteTypes.Up :
+                                z.Votes.Any(z => z.Type == CommentReplyVotes.Down && z.UserId == userId) ? VoteTypes.Down
+                                : VoteTypes.None
+                        }
+                    }),
+                    UserVote = new UserVoteDto()
+                    {
+                        VoteType = x.Votes.Any(x => x.Type == CommentVotes.Up && x.UserId == userId) ? VoteTypes.Up :
+                                x.Votes.Any(x => x.Type == CommentVotes.Down && x.UserId == userId) ? VoteTypes.Down
+                                : VoteTypes.None
+                    }
+                })
+                .ToListAsync();
+
+            return postComments;
         }
 
         public async Task CreateCommentAsync(CommentCreateDto commentCreateDto, ApplicationUser user, Post post)
@@ -60,7 +142,7 @@ namespace Services.Entity.Comments
 
             return operationResult;
         }
-        
+
         public async Task<OperationResult> DeleteCommentAsync(long commentId, string userId)
         {
             var operationResult = new OperationResult();
