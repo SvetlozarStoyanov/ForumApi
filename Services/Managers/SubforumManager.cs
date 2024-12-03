@@ -24,10 +24,13 @@ namespace Services.Managers
             this.postService = postService;
         }
 
-        public async Task<OperationResult<SubforumDetailsDto>> GetSubforumByNameAsync(string name)
+        public async Task<OperationResult<SubforumDetailsDto>> GetSubforumByNameAsync(string name, string? userId)
         {
             var operationResult = new OperationResult<SubforumDetailsDto>();
+
+
             var fetchSubforumByNameResult = await subforumService.GetSubforumByNameAsync(name);
+
 
             if (!fetchSubforumByNameResult.IsSuccessful)
             {
@@ -35,14 +38,26 @@ namespace Services.Managers
                 return operationResult;
             }
 
-            var subforum = fetchSubforumByNameResult.Data;
+            var subforumDto = fetchSubforumByNameResult.Data;
 
-            var subforumPosts = await postService.GetSubforumPostsAsync(subforum.Id);
+            if (userId is not null)
+            {
+                var user = await unitOfWork.UserRepository.GetByIdAsync(userId);
 
-            subforum.Posts = subforumPosts;
+                if (user is null)
+                {
+                    operationResult.AddError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
+                    return operationResult;
+                }
+            }
 
-            operationResult.Data = subforum;
-            
+            var subforumPosts = userId is not null ? await postService.GetSubforumPostsAsync(subforumDto.Id, userId)
+            : await postService.GetSubforumPostsForGuestUserAsync(subforumDto.Id);
+
+            subforumDto.Posts = subforumPosts;
+
+            operationResult.Data = subforumDto;
+
             return operationResult;
         }
 

@@ -26,14 +26,52 @@ namespace Services.Managers
             this.postVoteService = postVoteService;
         }
 
-        public async Task<IEnumerable<PostListDto>> GetHomePagePostsForGuestUserAsync()
+        public async Task<OperationResult<IEnumerable<PostListDto>>> GetHomePagePostsAsync(string? userId)
         {
-            return await postService.GetHomePagePostsForGuestUserAsync();
+            var operationResult = new OperationResult<IEnumerable<PostListDto>>();
+            if (userId is not null)
+            {
+                var user = await unitOfWork.UserRepository.GetByIdAsync(userId);
+
+                if (user is null)
+                {
+                    operationResult.AddError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
+                    return operationResult;
+                }
+            }
+
+            operationResult.Data = userId is not null ? await postService.GetHomePagePostsAsync(userId)
+                : await postService.GetHomePagePostsForGuestUserAsync();
+
+            return operationResult;
         }
 
-        public async Task<OperationResult<PostDetailsDto>> GetPostDetailsByIdAsync(long id)
+        public async Task<OperationResult<PostDetailsDto>> GetPostDetailsByIdAsync(long id, string? userId)
         {
-            return await postService.GetPostDetailsByIdAsync(id);
+            var operationResult = new OperationResult<PostDetailsDto>();
+            if (userId is not null)
+            {
+                var user = await unitOfWork.UserRepository.GetByIdAsync(userId);
+
+                if (user is null)
+                {
+                    operationResult.AddError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
+                    return operationResult;
+                }
+            }
+
+            var fetchPostDetailsResult = userId is not null ? await postService.GetPostDetailsByIdAsync(id, userId)
+             : await postService.GetPostDetailsByIdForGuestUserAsync(id);
+
+            if (!fetchPostDetailsResult.IsSuccessful)
+            {
+                operationResult.AppendErrors(fetchPostDetailsResult);
+                return operationResult;
+            }
+
+            operationResult.Data = fetchPostDetailsResult.Data;
+
+            return operationResult;
         }
 
         public async Task<OperationResult> CreatePostAsync(string userId, PostCreateDto postCreateDto)

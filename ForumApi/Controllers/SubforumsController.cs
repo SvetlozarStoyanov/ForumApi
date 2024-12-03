@@ -23,7 +23,7 @@ namespace ForumApi.Controllers
         [Route("details/{name}")]
         public async Task<IActionResult> GetSubforumByNameAsync([FromRoute]string name)
         {
-            var operationResult = await subforumManager.GetSubforumByNameAsync(name);
+            var operationResult = await subforumManager.GetSubforumByNameAsync(name, User.GetId());
 
             if (!operationResult.IsSuccessful)
             {

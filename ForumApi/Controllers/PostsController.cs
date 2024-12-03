@@ -21,12 +21,17 @@ namespace ForumApi.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        [Route("get-guest-user-posts")]
-        public async Task<IActionResult> GetGuestUserHomePagePosts()
+        [Route("get-home-posts")]
+        public async Task<IActionResult> GetHomePagePosts()
         {
-            var posts = await postManager.GetHomePagePostsForGuestUserAsync();
+            var operationResult = await postManager.GetHomePagePostsAsync(User.GetId());
 
-            return Ok(posts);
+            if (!operationResult.IsSuccessful)
+            {
+                return this.Error(operationResult);
+            }
+
+            return Ok(operationResult.Data);
         }
 
         [AllowAnonymous]
@@ -34,7 +39,7 @@ namespace ForumApi.Controllers
         [Route("details/{id}")]
         public async Task<IActionResult> Details([FromRoute] long id)
         {
-            var operationResult = await postManager.GetPostDetailsByIdAsync(id);
+            var operationResult = await postManager.GetPostDetailsByIdAsync(id, User.GetId());
 
             if (!operationResult.IsSuccessful)
             {

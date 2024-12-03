@@ -9,10 +9,10 @@ namespace Contracts.Services.Managers
     {
         Task<OperationResult> VoteOnPostAsync(long postId, string userId, PostVotes type);
 
-        Task<IEnumerable<PostListDto>> GetHomePagePostsForGuestUserAsync();
+        Task<OperationResult<IEnumerable<PostListDto>>> GetHomePagePostsAsync(string? userId);
 
-        Task<OperationResult<PostDetailsDto>> GetPostDetailsByIdAsync(long id);
-        
+        Task<OperationResult<PostDetailsDto>> GetPostDetailsByIdAsync(long id, string? userId);
+
         Task<OperationResult> CreatePostAsync(string userId, PostCreateDto postCreateDto);
 
         Task<OperationResult> UpdatePostAsync(long postId, string userId, PostUpdateDto postUpdateDto);

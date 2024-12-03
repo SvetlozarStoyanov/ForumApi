@@ -14,6 +14,8 @@ using Models.DTOs.Posts.Input;
 using Models.DTOs.Posts.Output;
 using Models.DTOs.Subforums.Output;
 using Models.DTOs.Users.Output;
+using Models.DTOs.Votes.Output;
+using Models.Enums.Votes;
 
 namespace Services.Entity.Posts
 {
@@ -37,6 +39,7 @@ namespace Services.Entity.Posts
                     Title = x.Title,
                     Text = x.Text,
                     VoteTally = x.Votes.Where(x => x.Type == PostVotes.Up).Count() - x.Votes.Where(x => x.Type == PostVotes.Down).Count(),
+                    CommentCount = x.Comments.Count + x.Comments.SelectMany(c => c.Replies).Count(),
                     User = new UserMinInfoDto()
                     {
                         Id = x.UserId,
@@ -47,14 +50,47 @@ namespace Services.Entity.Posts
                         Id = x.SubforumId,
                         Name = x.Subforum.Name
                     },
-                    CommentCount = x.Comments.Count + x.Comments.SelectMany(c => c.Replies).Count()
                 })
                 .ToListAsync();
 
             return posts;
         }
 
-        public async Task<IEnumerable<PostListDto>> GetSubforumPostsAsync(long subforumId)
+        public async Task<IEnumerable<PostListDto>> GetHomePagePostsAsync(string userId)
+        {
+            var posts = await unitOfWork.PostRepository.AllAsNoTracking()
+                .OrderByDescending(x => x.CreatedOn)
+                .Take(20)
+                .Select(x => new PostListDto()
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Text = x.Text,
+                    VoteTally = x.Votes.Where(x => x.Type == PostVotes.Up).Count() - x.Votes.Where(x => x.Type == PostVotes.Down).Count(),
+                    CommentCount = x.Comments.Count + x.Comments.SelectMany(c => c.Replies).Count(),
+                    User = new UserMinInfoDto()
+                    {
+                        Id = x.UserId,
+                        Username = x.User.UserName!
+                    },
+                    Subforum = new SubforumMinInfoDto()
+                    {
+                        Id = x.SubforumId,
+                        Name = x.Subforum.Name
+                    },
+                    UserVote = new UserVoteDto()
+                    {
+                        VoteType = x.Votes.Any(x => x.Type == PostVotes.Up && x.UserId == userId) ? VoteTypes.Up :
+                                    x.Votes.Any(x => x.Type == PostVotes.Down && x.UserId == userId) ? VoteTypes.Down
+                                    : VoteTypes.None
+                    }
+                })
+                .ToListAsync();
+
+            return posts;
+        }
+
+        public async Task<IEnumerable<PostListDto>> GetSubforumPostsForGuestUserAsync(long subforumId)
         {
             var posts = await unitOfWork.PostRepository
                 .FindByConditionAsNoTracking(x => x.SubforumId == subforumId)
@@ -64,6 +100,7 @@ namespace Services.Entity.Posts
                     Title = x.Title,
                     Text = x.Text,
                     VoteTally = x.Votes.Where(x => x.Type == PostVotes.Up).Count() - x.Votes.Where(x => x.Type == PostVotes.Down).Count(),
+                    CommentCount = x.Comments.Count + x.Comments.SelectMany(c => c.Replies).Count(),
                     User = new UserMinInfoDto()
                     {
                         Id = x.UserId,
@@ -74,14 +111,47 @@ namespace Services.Entity.Posts
                         Id = x.SubforumId,
                         Name = x.Subforum.Name
                     },
-                    CommentCount = x.Comments.Count + x.Comments.SelectMany(c => c.Replies).Count()
+
                 })
                 .ToListAsync();
 
             return posts;
         }
 
-        public async Task<OperationResult<PostDetailsDto>> GetPostDetailsByIdAsync(long id)
+        public async Task<IEnumerable<PostListDto>> GetSubforumPostsAsync(long subforumId, string userId)
+        {
+            var posts = await unitOfWork.PostRepository
+                .FindByConditionAsNoTracking(x => x.SubforumId == subforumId)
+                .Select(x => new PostListDto()
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Text = x.Text,
+                    VoteTally = x.Votes.Where(x => x.Type == PostVotes.Up).Count() - x.Votes.Where(x => x.Type == PostVotes.Down).Count(),
+                    CommentCount = x.Comments.Count + x.Comments.SelectMany(c => c.Replies).Count(),
+                    User = new UserMinInfoDto()
+                    {
+                        Id = x.UserId,
+                        Username = x.User.UserName!
+                    },
+                    Subforum = new SubforumMinInfoDto()
+                    {
+                        Id = x.SubforumId,
+                        Name = x.Subforum.Name
+                    },
+                    UserVote = new UserVoteDto()
+                    {
+                        VoteType = x.Votes.Any(x => x.Type == PostVotes.Up && x.UserId == userId) ? VoteTypes.Up :
+                                    x.Votes.Any(x => x.Type == PostVotes.Down && x.UserId == userId) ? VoteTypes.Down
+                                    : VoteTypes.None
+                    }
+                })
+                .ToListAsync();
+
+            return posts;
+        }
+
+        public async Task<OperationResult<PostDetailsDto>> GetPostDetailsByIdForGuestUserAsync(long id)
         {
             var operationResult = new OperationResult<PostDetailsDto>();
             var postDetails = await unitOfWork.PostRepository.FindByConditionAsNoTracking(x => x.Id == id)
@@ -103,29 +173,7 @@ namespace Services.Entity.Posts
                             Id = x.SubforumId,
                             Name = x.Subforum.Name
                         },
-                    },
-                    Comments = x.Comments.Select(y => new CommentListDto()
-                    {
-                        Id = y.Id,
-                        Text = y.Text,
-                        User = new UserMinInfoDto()
-                        {
-                            Id = y.UserId,
-                            Username = y.User.UserName!
-                        },
-                        VoteTally = y.Votes.Count(x => x.Type == CommentVotes.Up) - y.Votes.Count(x => x.Type == CommentVotes.Down),
-                        Replies = y.Replies.Select(z => new CommentReplyListDto()
-                        {
-                            Id = z.Id,
-                            Text = z.Text,
-                            User = new UserMinInfoDto()
-                            {
-                                Id = z.UserId,
-                                Username = z.User.UserName!
-                            },
-                            VoteTally = z.Votes.Count(x => x.Type == CommentReplyVotes.Up) - z.Votes.Count(x => x.Type == CommentReplyVotes.Down),
-                        })
-                    })
+                    }
                 })
                 .FirstOrDefaultAsync();
 
@@ -136,7 +184,52 @@ namespace Services.Entity.Posts
                 return operationResult;
             }
 
-            postDetails.Post.CommentCount = postDetails.Comments.Count() + postDetails.Comments.SelectMany(x => x.Replies).Count();
+            
+
+            operationResult.Data = postDetails;
+
+            return operationResult;
+        }
+
+        public async Task<OperationResult<PostDetailsDto>> GetPostDetailsByIdAsync(long id, string userId)
+        {
+            var operationResult = new OperationResult<PostDetailsDto>();
+            var postDetails = await unitOfWork.PostRepository.FindByConditionAsNoTracking(x => x.Id == id)
+                .Select(x => new PostDetailsDto()
+                {
+                    Post = new PostListDto()
+                    {
+                        Id = x.Id,
+                        Title = x.Title,
+                        Text = x.Text,
+                        VoteTally = x.Votes.Count(x => x.Type == PostVotes.Up) - x.Votes.Count(x => x.Type == PostVotes.Down),
+                        User = new UserMinInfoDto()
+                        {
+                            Id = x.UserId,
+                            Username = x.User.UserName!
+                        },
+                        Subforum = new SubforumMinInfoDto()
+                        {
+                            Id = x.SubforumId,
+                            Name = x.Subforum.Name
+                        },
+                        UserVote = new UserVoteDto()
+                        {
+                            VoteType = x.Votes.Any(x => x.Type == PostVotes.Up && x.UserId == userId) ? VoteTypes.Up :
+                                    x.Votes.Any(x => x.Type == PostVotes.Down && x.UserId == userId) ? VoteTypes.Down
+                                    : VoteTypes.None
+                        }
+                    }
+                })
+                .FirstOrDefaultAsync();
+
+
+            if (postDetails is null)
+            {
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"{nameof(Post)} with id: {id} was not found!"));
+                return operationResult;
+            }
+
 
             operationResult.Data = postDetails;
 
