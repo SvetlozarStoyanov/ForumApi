@@ -1,4 +1,5 @@
 ﻿using Database.Entities.Identity;
+using Database.Entities.Posts;
 using Database.Entities.Subforums;
 using Models.Common;
 using Models.DTOs.Posts.Input;
@@ -20,7 +21,7 @@ namespace Contracts.Services.Entity.Posts
 
         Task<OperationResult<PostDetailsDto>> GetPostDetailsByIdAsync(long id, string userId);
 
-        Task CreatePostAsync(PostCreateDto postCreateDto,
+        Task<Post> CreatePostAsync(PostCreateDto postCreateDto,
             ApplicationUser user,
             Subforum subforum);
 

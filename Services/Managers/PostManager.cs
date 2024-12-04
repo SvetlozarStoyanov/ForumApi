@@ -74,9 +74,9 @@ namespace Services.Managers
             return operationResult;
         }
 
-        public async Task<OperationResult> CreatePostAsync(string userId, PostCreateDto postCreateDto)
+        public async Task<OperationResult<long>> CreatePostAsync(string userId, PostCreateDto postCreateDto)
         {
-            var operationResult = new OperationResult();
+            var operationResult = new OperationResult<long>();
 
             var user = await unitOfWork.UserRepository.GetByIdAsync(userId);
 
@@ -94,9 +94,11 @@ namespace Services.Managers
                 return operationResult;
             }
 
-            await postService.CreatePostAsync(postCreateDto, user, subforum);
+            var createdPost = await postService.CreatePostAsync(postCreateDto, user, subforum);
 
             await unitOfWork.SaveChangesAsync();
+
+            operationResult.Data = createdPost.Id;
 
             return operationResult;
         }
@@ -124,6 +126,8 @@ namespace Services.Managers
             }
 
             await unitOfWork.SaveChangesAsync();
+
+
 
             return operationResult;
         }

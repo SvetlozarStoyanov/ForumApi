@@ -7,7 +7,7 @@ namespace Contracts.Services.Entity.CommentReplies
 {
     public interface ICommentReplyService
     {
-        Task CreateCommentReplyAsync(CommentReplyCreateDto commentReplyCreateDto,
+        Task<CommentReply> CreateCommentReplyAsync(CommentReplyCreateDto commentReplyCreateDto,
             ApplicationUser user,
             Comment comment);
 

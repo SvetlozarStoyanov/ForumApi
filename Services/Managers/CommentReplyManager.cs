@@ -26,10 +26,10 @@ namespace Services.Managers
             this.commentReplyVoteService = commentReplyVoteService;
         }
 
-        public async Task<OperationResult> CreateCommentReplyAsync(string userId,
+        public async Task<OperationResult<long>> CreateCommentReplyAsync(string userId,
             CommentReplyCreateDto commentReplyCreateDto)
         {
-            var operationResult = new OperationResult();
+            var operationResult = new OperationResult<long>();
 
             var user = await unitOfWork.UserRepository.GetByIdAsync(userId);
 
@@ -47,9 +47,11 @@ namespace Services.Managers
                 return operationResult;
             }
 
-            await commentReplyService.CreateCommentReplyAsync(commentReplyCreateDto, user, comment);
+            var createdCommentReply = await commentReplyService.CreateCommentReplyAsync(commentReplyCreateDto, user, comment);
 
             await unitOfWork.SaveChangesAsync();
+
+            operationResult.Data = createdCommentReply.Id;
 
             return operationResult;
         }
@@ -82,7 +84,7 @@ namespace Services.Managers
         public async Task<OperationResult> VoteOnCommentReplyAsync(long commentReplyId, string userId, CommentReplyVotes type)
         {
             var operationResult = new OperationResult();
-            
+
             var commentReply = await unitOfWork.CommentReplyRepository.FindByCondition(x => x.Id == commentReplyId)
                 .Include(x => x.Votes)
                 .FirstOrDefaultAsync();

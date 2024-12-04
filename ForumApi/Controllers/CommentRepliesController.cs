@@ -31,7 +31,7 @@ namespace ForumApi.Controllers
                 return this.Error(operationResult);
             }
 
-            return Ok();
+            return Ok(operationResult.Data);
         }
 
         [HttpPut]

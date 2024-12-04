@@ -13,6 +13,7 @@ using Models.DTOs.Comments.Output;
 using Models.DTOs.Posts.Input;
 using Models.DTOs.Posts.Output;
 using Models.DTOs.Subforums.Output;
+using Models.DTOs.UserPermittedActions.Output;
 using Models.DTOs.Users.Output;
 using Models.DTOs.Votes.Output;
 using Models.Enums.Votes;
@@ -78,6 +79,11 @@ namespace Services.Entity.Posts
                         Id = x.SubforumId,
                         Name = x.Subforum.Name
                     },
+                    UserPermittedActions = new UserPermittedActionsDto()
+                    {
+                        CanEdit = x.UserId == userId,
+                        CanDelete = x.UserId == userId
+                    },
                     UserVote = new UserVoteDto()
                     {
                         VoteType = x.Votes.Any(x => x.Type == PostVotes.Up && x.UserId == userId) ? VoteTypes.Up :
@@ -139,6 +145,11 @@ namespace Services.Entity.Posts
                         Id = x.SubforumId,
                         Name = x.Subforum.Name
                     },
+                    UserPermittedActions = new UserPermittedActionsDto()
+                    {
+                        CanEdit = x.UserId == userId,
+                        CanDelete = x.UserId == userId
+                    },
                     UserVote = new UserVoteDto()
                     {
                         VoteType = x.Votes.Any(x => x.Type == PostVotes.Up && x.UserId == userId) ? VoteTypes.Up :
@@ -163,6 +174,7 @@ namespace Services.Entity.Posts
                         Title = x.Title,
                         Text = x.Text,
                         VoteTally = x.Votes.Count(x => x.Type == PostVotes.Up) - x.Votes.Count(x => x.Type == PostVotes.Down),
+                        CommentCount = x.Comments.Count + x.Comments.SelectMany(c => c.Replies).Count(),
                         User = new UserMinInfoDto()
                         {
                             Id = x.UserId,
@@ -184,7 +196,6 @@ namespace Services.Entity.Posts
                 return operationResult;
             }
 
-            
 
             operationResult.Data = postDetails;
 
@@ -203,6 +214,7 @@ namespace Services.Entity.Posts
                         Title = x.Title,
                         Text = x.Text,
                         VoteTally = x.Votes.Count(x => x.Type == PostVotes.Up) - x.Votes.Count(x => x.Type == PostVotes.Down),
+                        CommentCount = x.Comments.Count + x.Comments.SelectMany(c => c.Replies).Count(),
                         User = new UserMinInfoDto()
                         {
                             Id = x.UserId,
@@ -212,6 +224,11 @@ namespace Services.Entity.Posts
                         {
                             Id = x.SubforumId,
                             Name = x.Subforum.Name
+                        },
+                        UserPermittedActions = new UserPermittedActionsDto()
+                        {
+                            CanEdit = x.UserId == userId,
+                            CanDelete = x.UserId == userId
                         },
                         UserVote = new UserVoteDto()
                         {
@@ -230,13 +247,12 @@ namespace Services.Entity.Posts
                 return operationResult;
             }
 
-
             operationResult.Data = postDetails;
 
             return operationResult;
         }
 
-        public async Task CreatePostAsync(PostCreateDto postCreateDto,
+        public async Task<Post> CreatePostAsync(PostCreateDto postCreateDto,
             ApplicationUser user,
             Subforum subforum)
         {
@@ -253,6 +269,8 @@ namespace Services.Entity.Posts
             };
 
             await unitOfWork.PostRepository.AddAsync(post);
+
+            return post;
         }
 
         public async Task<OperationResult> UpdatePostAsync(long postId, string userId, PostUpdateDto postUpdateDto)

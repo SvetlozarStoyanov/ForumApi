@@ -18,7 +18,7 @@ namespace Services.Entity.CommentReplies
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task CreateCommentReplyAsync(CommentReplyCreateDto commentReplyCreateDto, ApplicationUser user, Comment comment)
+        public async Task<CommentReply> CreateCommentReplyAsync(CommentReplyCreateDto commentReplyCreateDto, ApplicationUser user, Comment comment)
         {
             var currDate = DateTime.UtcNow;
 
@@ -32,6 +32,8 @@ namespace Services.Entity.CommentReplies
             };
 
             await unitOfWork.CommentReplyRepository.AddAsync(commentReply);
+
+            return commentReply;
         }
 
         public async Task<OperationResult> UpdateCommentReplyAsync(long commentReplyId, string userId, CommentReplyUpdateDto commentReplyUpdateDto)

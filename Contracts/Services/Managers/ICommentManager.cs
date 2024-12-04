@@ -9,7 +9,7 @@ namespace Contracts.Services.Managers
     {
         Task<OperationResult<IEnumerable<CommentListDto>>> GetPostCommentsAsync(long postId, string? userId);
 
-        Task<OperationResult> CreateCommentAsync(string userId,
+        Task<OperationResult<long>> CreateCommentAsync(string userId,
             CommentCreateDto commentCreateDto);
 
         Task<OperationResult> UpdateCommentAsync(long commentId,

@@ -13,7 +13,7 @@ namespace Contracts.Services.Managers
 
         Task<OperationResult<PostDetailsDto>> GetPostDetailsByIdAsync(long id, string? userId);
 
-        Task<OperationResult> CreatePostAsync(string userId, PostCreateDto postCreateDto);
+        Task<OperationResult<long>> CreatePostAsync(string userId, PostCreateDto postCreateDto);
 
         Task<OperationResult> UpdatePostAsync(long postId, string userId, PostUpdateDto postUpdateDto);
 

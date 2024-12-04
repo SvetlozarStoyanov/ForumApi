@@ -6,13 +6,13 @@ namespace Contracts.Services.Managers
 {
     public interface ICommentReplyManager
     {
-
-        Task<OperationResult> CreateCommentReplyAsync(string userId,
+        Task<OperationResult<long>> CreateCommentReplyAsync(string userId,
             CommentReplyCreateDto commentReplyCreateDto);
 
         Task<OperationResult> UpdateCommentReplyAsync(long commentReplyId,
             string userId,
             CommentReplyUpdateDto commentReplyUpdateDto);
+
         Task<OperationResult> VoteOnCommentReplyAsync(long commentReplyId, string userId, CommentReplyVotes type);
 
         Task<OperationResult> DeleteCommentReplyAsync(long commentReplyId,

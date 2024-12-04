@@ -11,6 +11,7 @@ using Models.Common.Enums;
 using Models.DTOs.CommentReplies.Output;
 using Models.DTOs.Comments.Input;
 using Models.DTOs.Comments.Output;
+using Models.DTOs.UserPermittedActions.Output;
 using Models.DTOs.Users.Output;
 using Models.DTOs.Votes.Output;
 using Models.Enums.Votes;
@@ -49,8 +50,7 @@ namespace Services.Entity.Comments
                         {
                             Id = z.UserId,
                             Username = z.User.UserName!
-                        },
-
+                        }
                     }),
                 })
                 .ToListAsync();
@@ -58,7 +58,7 @@ namespace Services.Entity.Comments
             return postComments;
         }
 
-        public async Task<IEnumerable<CommentListDto>> GetPostCommentsAsync(long postId, string? userId)
+        public async Task<IEnumerable<CommentListDto>> GetPostCommentsAsync(long postId, string userId)
         {
             var postComments = await unitOfWork.CommentRepository
                 .FindByConditionAsNoTracking(x => x.PostId == postId)
@@ -82,6 +82,11 @@ namespace Services.Entity.Comments
                             Id = z.UserId,
                             Username = z.User.UserName!
                         },
+                        UserPermittedActions = new UserPermittedActionsDto()
+                        {
+                            CanEdit = z.UserId == userId,
+                            CanDelete = z.UserId == userId
+                        },
                         UserVote = new UserVoteDto()
                         {
                             VoteType = z.Votes.Any(z => z.Type == CommentReplyVotes.Up && z.UserId == userId) ? VoteTypes.Up :
@@ -89,6 +94,11 @@ namespace Services.Entity.Comments
                                 : VoteTypes.None
                         }
                     }),
+                    UserPermittedActions = new UserPermittedActionsDto()
+                    {
+                        CanEdit = x.UserId == userId,
+                        CanDelete = x.UserId == userId
+                    },
                     UserVote = new UserVoteDto()
                     {
                         VoteType = x.Votes.Any(x => x.Type == CommentVotes.Up && x.UserId == userId) ? VoteTypes.Up :
@@ -101,7 +111,7 @@ namespace Services.Entity.Comments
             return postComments;
         }
 
-        public async Task CreateCommentAsync(CommentCreateDto commentCreateDto, ApplicationUser user, Post post)
+        public async Task<Comment> CreateCommentAsync(CommentCreateDto commentCreateDto, ApplicationUser user, Post post)
         {
             var operationResult = new OperationResult();
 
@@ -117,6 +127,8 @@ namespace Services.Entity.Comments
             };
 
             await unitOfWork.CommentRepository.AddAsync(comment);
+
+            return comment;
         }
 
         public async Task<OperationResult> UpdateCommentAsync(long commentId, string userId, CommentUpdateDto commentUpdateDto)

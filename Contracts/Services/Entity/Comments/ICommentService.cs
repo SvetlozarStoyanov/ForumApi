@@ -1,4 +1,5 @@
-﻿using Database.Entities.Identity;
+﻿using Database.Entities.Comments;
+using Database.Entities.Identity;
 using Database.Entities.Posts;
 using Models.Common;
 using Models.DTOs.Comments.Input;
@@ -10,9 +11,9 @@ namespace Contracts.Services.Entity.Comments
     {
         Task<IEnumerable<CommentListDto>> GetPostCommentsForGuestUserAsync(long postId);
 
-        Task<IEnumerable<CommentListDto>> GetPostCommentsAsync(long postId, string? userId);
+        Task<IEnumerable<CommentListDto>> GetPostCommentsAsync(long postId, string userId);
 
-        Task CreateCommentAsync(CommentCreateDto commentCreateDto,
+        Task<Comment> CreateCommentAsync(CommentCreateDto commentCreateDto,
             ApplicationUser user,
             Post post);
 

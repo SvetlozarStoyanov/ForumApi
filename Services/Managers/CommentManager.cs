@@ -59,9 +59,9 @@ namespace Services.Managers
             return operationResult;
         }
 
-        public async Task<OperationResult> CreateCommentAsync(string userId, CommentCreateDto commentCreateDto)
+        public async Task<OperationResult<long>> CreateCommentAsync(string userId, CommentCreateDto commentCreateDto)
         {
-            var operationResult = new OperationResult();
+            var operationResult = new OperationResult<long>();
 
             var user = await unitOfWork.UserRepository.GetByIdAsync(userId);
 
@@ -79,9 +79,11 @@ namespace Services.Managers
                 return operationResult;
             }
 
-            await commentService.CreateCommentAsync(commentCreateDto, user, post);
+            var createdComment = await commentService.CreateCommentAsync(commentCreateDto, user, post);
 
             await unitOfWork.SaveChangesAsync();
+
+            operationResult.Data = createdComment.Id;
 
             return operationResult;
         }
