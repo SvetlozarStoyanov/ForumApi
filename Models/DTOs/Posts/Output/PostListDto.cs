@@ -1,4 +1,5 @@
 ﻿using Models.DTOs.Subforums.Output;
+using Models.DTOs.UserPermittedActions.Output;
 using Models.DTOs.Users.Output;
 using Models.DTOs.Votes.Output;
 
@@ -13,6 +14,7 @@ namespace Models.DTOs.Posts.Output
         public int CommentCount { get; set; }
         public UserMinInfoDto User { get; set; }
         public SubforumMinInfoDto Subforum { get; set; }
+        public UserPermittedActionsDto UserPermittedActions { get; set; }
         public UserVoteDto? UserVote { get; set; }
     }
 }
