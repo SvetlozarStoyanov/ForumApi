@@ -31,7 +31,7 @@
 
     }
 
-    public class OperationResult<T> : OperationResult where T : class
+    public class OperationResult<T> : OperationResult
     {
         public T Data { get; set; }
 
