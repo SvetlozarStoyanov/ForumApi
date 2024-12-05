@@ -22,7 +22,7 @@ namespace ForumApi.Controllers
 
         [HttpPost]
         [Route("create")]
-        public async Task<IActionResult> CreateComment(CommentReplyCreateDto commentReplyCreateDto)
+        public async Task<IActionResult> CreateCommentReply(CommentReplyCreateDto commentReplyCreateDto)
         {
             var operationResult = await commentReplyManager.CreateCommentReplyAsync(User.GetId(), commentReplyCreateDto);
 
