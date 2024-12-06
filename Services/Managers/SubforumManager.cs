@@ -24,6 +24,16 @@ namespace Services.Managers
             this.postService = postService;
         }
 
+        public async Task<IEnumerable<string>> GetAllSubforumNamesAsync()
+        {
+            return await subforumService.GetAllSubforumNamesAsync();
+        }
+
+        public async Task<IEnumerable<SubforumDropdownDto>> GetSubforumsForDropdownAsync()
+        {
+            return await subforumService.GetSubforumsForDropdownAsync();
+        }
+
         public async Task<OperationResult<SubforumDetailsDto>> GetSubforumByNameAsync(string name, string? userId)
         {
             var operationResult = new OperationResult<SubforumDetailsDto>();
@@ -61,9 +71,9 @@ namespace Services.Managers
             return operationResult;
         }
 
-        public async Task<OperationResult> CreateSubforumAsync(string userId, SubforumCreateDto subforumCreateDto)
+        public async Task<OperationResult<string>> CreateSubforumAsync(string userId, SubforumCreateDto subforumCreateDto)
         {
-            var operationResult = new OperationResult();
+            var operationResult = new OperationResult<string>();
 
             var user = await unitOfWork.UserRepository.GetByIdAsync(userId);
 
@@ -82,6 +92,8 @@ namespace Services.Managers
             }
 
             await unitOfWork.SaveChangesAsync();
+
+            operationResult.Data = createSubforumResult.Data;
 
             return operationResult;
         }

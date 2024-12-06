@@ -18,10 +18,29 @@ namespace ForumApi.Controllers
             this.subforumManager = subforumManager;
         }
 
+
+        [HttpGet]
+        [Route("all-names")]
+        public async Task<IActionResult> GetAllNames()
+        {
+            var names = await subforumManager.GetAllSubforumNamesAsync();
+
+            return Ok(names);
+        }
+
+        [HttpGet]
+        [Route("all-for-dropdown")]
+        public async Task<IActionResult> GetAllForDropdown()
+        {
+            var subforums = await subforumManager.GetSubforumsForDropdownAsync();
+
+            return Ok(subforums);
+        }
+
         [AllowAnonymous]
         [HttpGet]
         [Route("details/{name}")]
-        public async Task<IActionResult> GetSubforumByNameAsync([FromRoute]string name)
+        public async Task<IActionResult> GetSubforumByNameAsync([FromRoute] string name)
         {
             var operationResult = await subforumManager.GetSubforumByNameAsync(name, User.GetId());
 
@@ -38,13 +57,13 @@ namespace ForumApi.Controllers
         public async Task<IActionResult> CreateSubforum(SubforumCreateDto subforumCreateDto)
         {
             var operationResult = await subforumManager.CreateSubforumAsync(User.GetId(), subforumCreateDto);
-            
+
             if (!operationResult.IsSuccessful)
             {
                 return this.Error(operationResult);
             }
 
-            return Ok();
+            return Ok(new { Name = operationResult.Data });
         }
 
         [HttpPost]

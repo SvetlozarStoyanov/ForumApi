@@ -19,9 +19,31 @@ namespace Services.Entity.Subforums
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task<OperationResult> CreateSubforumAsync(SubforumCreateDto subforumCreateDto, ApplicationUser admin)
+        public async Task<IEnumerable<string>> GetAllSubforumNamesAsync()
         {
-            var operationResult = new OperationResult();
+            var subforumNames = await unitOfWork.SubForumRepository.AllAsNoTracking()
+                .Select(x => x.Name)
+                .ToListAsync();
+
+            return subforumNames;
+        }
+
+        public async Task<IEnumerable<SubforumDropdownDto>> GetSubforumsForDropdownAsync()
+        {
+            var subforumDtos = await unitOfWork.SubForumRepository.AllAsNoTracking()
+                .Select(x => new SubforumDropdownDto()
+                {
+                    Id = x.Id,
+                    Name = x.Name
+                })
+                .ToListAsync();
+
+            return subforumDtos;
+        }
+
+        public async Task<OperationResult<string>> CreateSubforumAsync(SubforumCreateDto subforumCreateDto, ApplicationUser admin)
+        {
+            var operationResult = new OperationResult<string>();
 
             var subforum = new Subforum()
             {
@@ -31,6 +53,8 @@ namespace Services.Entity.Subforums
             };
 
             await unitOfWork.SubForumRepository.AddAsync(subforum);
+
+            operationResult.Data = subforum.Name;
 
             return operationResult;
         }
