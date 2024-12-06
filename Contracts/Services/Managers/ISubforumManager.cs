@@ -6,9 +6,13 @@ namespace Contracts.Services.Managers
 {
     public interface ISubforumManager
     {
+        Task<IEnumerable<string>> GetAllSubforumNamesAsync();
+
+        Task<IEnumerable<SubforumDropdownDto>> GetSubforumsForDropdownAsync();
+
         Task<OperationResult<SubforumDetailsDto>> GetSubforumByNameAsync(string name, string? userId);
 
-        Task<OperationResult> CreateSubforumAsync(string userId, SubforumCreateDto subforumCreateDto);
+        Task<OperationResult<string>> CreateSubforumAsync(string userId, SubforumCreateDto subforumCreateDto);
 
         Task<OperationResult> JoinSubforumAsync(long subforumId, string userId);
     }
