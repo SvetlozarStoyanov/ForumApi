@@ -16,6 +16,15 @@ namespace Services.Entity.ApplicationUsers
             this.unitOfWork = unitOfWork;
         }
 
+        public async Task<IEnumerable<string>> GetAllUsernamesAsync()
+        {
+            var usernames = await unitOfWork.UserRepository.AllAsNoTracking()
+                .Select(x => x.UserName)
+                .ToListAsync();
+
+            return usernames;
+        }
+
         public async Task<OperationResult<UserShortInfoDto>> GetUserByIdAsync(string userId)
         {
             var operationResult = new OperationResult<UserShortInfoDto>();

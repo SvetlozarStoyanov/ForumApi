@@ -121,6 +121,16 @@ namespace ForumApi.Controllers
             return Ok();
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("all-usernames")]
+        public async Task<IActionResult> GetAllUsernames()
+        {
+            var usernames = await userService.GetAllUsernamesAsync();
+
+            return Ok(usernames);
+        }
+
         [HttpPost]
         [Route("get-info")]
         public async Task<IActionResult> GetUserInfo()

@@ -7,6 +7,8 @@ namespace Contracts.Services.Entity.Users
     {
         Task<bool> IsUserNameTakenAsync(string userName);
 
+        Task<IEnumerable<string>> GetAllUsernamesAsync();
+
         Task<OperationResult<UserShortInfoDto>> GetUserByIdAsync(string userId);
     }
 }
