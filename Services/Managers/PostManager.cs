@@ -26,7 +26,7 @@ namespace Services.Managers
             this.postVoteService = postVoteService;
         }
 
-        public async Task<OperationResult<IEnumerable<PostListDto>>> GetHomePagePostsAsync(string? userId)
+        public async Task<OperationResult<IEnumerable<PostListDto>>> GetHomePagePostsAsync(string? userId, PostsQueryDto postsQueryDto)
         {
             var operationResult = new OperationResult<IEnumerable<PostListDto>>();
             if (userId is not null)
@@ -40,8 +40,38 @@ namespace Services.Managers
                 }
             }
 
-            operationResult.Data = userId is not null ? await postService.GetHomePagePostsAsync(userId)
-                : await postService.GetHomePagePostsForGuestUserAsync();
+            operationResult.Data = userId is not null ? await postService.GetHomePagePostsAsync(userId, postsQueryDto)
+                : await postService.GetHomePagePostsForGuestUserAsync(postsQueryDto);
+
+            return operationResult;
+        }
+
+        public async Task<OperationResult<IEnumerable<PostListDto>>> GetSubforumPostsAsync(long subforumId, string userId, PostsQueryDto postsQueryDto)
+        {
+            var operationResult = new OperationResult<IEnumerable<PostListDto>>();
+            var subforum = await unitOfWork.SubForumRepository.GetByIdAsync(subforumId);
+
+            if (subforum is null)
+            {
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"{nameof(Subforum)} with id: {subforumId} was not found!"));
+                return operationResult;
+            }
+
+            if (userId is not null)
+            {
+                var user = await unitOfWork.UserRepository.GetByIdAsync(userId);
+
+                if (user is null)
+                {
+                    operationResult.AddError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
+                    return operationResult;
+                }
+            }
+
+            var fetchedPosts = userId is not null ? await postService.GetSubforumPostsAsync(subforumId, userId, postsQueryDto) :
+                await postService.GetSubforumPostsForGuestUserAsync(subforumId, postsQueryDto);
+
+            operationResult.Data = fetchedPosts;
 
             return operationResult;
         }

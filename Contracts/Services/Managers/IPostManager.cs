@@ -9,7 +9,7 @@ namespace Contracts.Services.Managers
     {
         Task<OperationResult> VoteOnPostAsync(long postId, string userId, PostVotes type);
 
-        Task<OperationResult<IEnumerable<PostListDto>>> GetHomePagePostsAsync(string? userId);
+        Task<OperationResult<IEnumerable<PostListDto>>> GetHomePagePostsAsync(string? userId, PostsQueryDto postsQueryDto);
 
         Task<OperationResult<PostDetailsDto>> GetPostDetailsByIdAsync(long id, string? userId);
 
@@ -19,5 +19,6 @@ namespace Contracts.Services.Managers
 
         Task<OperationResult> DeletePostAsync(long postId, string userId);
 
+        Task<OperationResult<IEnumerable<PostListDto>>> GetSubforumPostsAsync(long subforumId, string userId, PostsQueryDto postsQueryDto);
     }
 }

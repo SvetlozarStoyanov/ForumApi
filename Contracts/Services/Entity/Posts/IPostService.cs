@@ -9,13 +9,13 @@ namespace Contracts.Services.Entity.Posts
 {
     public interface IPostService
     {
-        Task<IEnumerable<PostListDto>> GetHomePagePostsForGuestUserAsync();
+        Task<IEnumerable<PostListDto>> GetHomePagePostsForGuestUserAsync(PostsQueryDto postsQueryDto);
 
-        Task<IEnumerable<PostListDto>> GetHomePagePostsAsync(string userId);
+        Task<IEnumerable<PostListDto>> GetHomePagePostsAsync(string userId, PostsQueryDto postsQueryDto);
 
-        Task<IEnumerable<PostListDto>> GetSubforumPostsForGuestUserAsync(long subforumId);
+        Task<IEnumerable<PostListDto>> GetSubforumPostsForGuestUserAsync(long subforumId, PostsQueryDto postsQueryDto);
 
-        Task<IEnumerable<PostListDto>> GetSubforumPostsAsync(long subforumId, string userId);
+        Task<IEnumerable<PostListDto>> GetSubforumPostsAsync(long subforumId, string userId, PostsQueryDto postsQueryDto);
 
         Task<OperationResult<PostDetailsDto>> GetPostDetailsByIdForGuestUserAsync(long id);
 

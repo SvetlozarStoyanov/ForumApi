@@ -8,14 +8,13 @@ using Database.Enums.Votes;
 using Microsoft.EntityFrameworkCore;
 using Models.Common;
 using Models.Common.Enums;
-using Models.DTOs.CommentReplies.Output;
-using Models.DTOs.Comments.Output;
 using Models.DTOs.Posts.Input;
 using Models.DTOs.Posts.Output;
 using Models.DTOs.Subforums.Output;
 using Models.DTOs.UserPermittedActions.Output;
 using Models.DTOs.Users.Output;
 using Models.DTOs.Votes.Output;
+using Models.Enums.Posts;
 using Models.Enums.Votes;
 
 namespace Services.Entity.Posts
@@ -29,11 +28,26 @@ namespace Services.Entity.Posts
             this.unitOfWork = unitOfWork;
         }
 
-        public async Task<IEnumerable<PostListDto>> GetHomePagePostsForGuestUserAsync()
+        public async Task<IEnumerable<PostListDto>> GetHomePagePostsForGuestUserAsync(PostsQueryDto postsQueryDto)
         {
-            var posts = await unitOfWork.PostRepository.AllAsNoTracking()
-                .OrderByDescending(x => x.CreatedOn)
-                .Take(20)
+            var postsQuery = unitOfWork.PostRepository.AllAsNoTracking();
+
+            switch (postsQueryDto.Order)
+            {
+                case PostOrdering.Newest:
+                    postsQuery = postsQuery.OrderByDescending(x => x.CreatedOn);
+                    break;
+                case PostOrdering.TopRated:
+                    postsQuery = postsQuery.OrderByDescending(x => x.Votes.Count(x => x.Type == PostVotes.Up) - x.Votes.Count(x => x.Type == PostVotes.Down));
+                    break;
+                case PostOrdering.Oldest:
+                    postsQuery = postsQuery.OrderBy(x => x.CreatedOn);
+                    break;
+            }
+
+            var posts = await postsQuery
+                .Skip((postsQueryDto.Page - 1) * 5)
+                .Take(5)
                 .Select(x => new PostListDto()
                 {
                     Id = x.Id,
@@ -57,11 +71,26 @@ namespace Services.Entity.Posts
             return posts;
         }
 
-        public async Task<IEnumerable<PostListDto>> GetHomePagePostsAsync(string userId)
+        public async Task<IEnumerable<PostListDto>> GetHomePagePostsAsync(string userId, PostsQueryDto postsQueryDto)
         {
-            var posts = await unitOfWork.PostRepository.AllAsNoTracking()
-                .OrderByDescending(x => x.CreatedOn)
-                .Take(20)
+            var postsQuery = unitOfWork.PostRepository.AllAsNoTracking();
+
+            switch (postsQueryDto.Order)
+            {
+                case PostOrdering.Newest:
+                    postsQuery = postsQuery.OrderByDescending(x => x.CreatedOn);
+                    break;
+                case PostOrdering.TopRated:
+                    postsQuery = postsQuery.OrderByDescending(x => x.Votes.Count(x => x.Type == PostVotes.Up) - x.Votes.Count(x => x.Type == PostVotes.Down));
+                    break;
+                case PostOrdering.Oldest:
+                    postsQuery = postsQuery.OrderBy(x => x.CreatedOn);
+                    break;
+            }
+
+            var posts = await postsQuery
+                .Skip((postsQueryDto.Page - 1) * 5)
+                .Take(5)
                 .Select(x => new PostListDto()
                 {
                     Id = x.Id,
@@ -96,10 +125,26 @@ namespace Services.Entity.Posts
             return posts;
         }
 
-        public async Task<IEnumerable<PostListDto>> GetSubforumPostsForGuestUserAsync(long subforumId)
+        public async Task<IEnumerable<PostListDto>> GetSubforumPostsForGuestUserAsync(long subforumId, PostsQueryDto postsQueryDto)
         {
-            var posts = await unitOfWork.PostRepository
-                .FindByConditionAsNoTracking(x => x.SubforumId == subforumId)
+            var postsQuery = unitOfWork.PostRepository.FindByConditionAsNoTracking(x => x.SubforumId == subforumId);
+
+            switch (postsQueryDto.Order)
+            {
+                case PostOrdering.Newest:
+                    postsQuery = postsQuery.OrderByDescending(x => x.CreatedOn);
+                    break;
+                case PostOrdering.TopRated:
+                    postsQuery = postsQuery.OrderByDescending(x => x.Votes.Count(x => x.Type == PostVotes.Up) - x.Votes.Count(x => x.Type == PostVotes.Down));
+                    break;
+                case PostOrdering.Oldest:
+                    postsQuery = postsQuery.OrderBy(x => x.CreatedOn);
+                    break;
+            }
+
+            var posts = await postsQuery
+                .Skip((postsQueryDto.Page - 1) * 5)
+                .Take(5)
                 .Select(x => new PostListDto()
                 {
                     Id = x.Id,
@@ -124,10 +169,26 @@ namespace Services.Entity.Posts
             return posts;
         }
 
-        public async Task<IEnumerable<PostListDto>> GetSubforumPostsAsync(long subforumId, string userId)
+        public async Task<IEnumerable<PostListDto>> GetSubforumPostsAsync(long subforumId, string userId, PostsQueryDto postsQueryDto)
         {
-            var posts = await unitOfWork.PostRepository
-                .FindByConditionAsNoTracking(x => x.SubforumId == subforumId)
+            var postsQuery = unitOfWork.PostRepository.FindByConditionAsNoTracking(x => x.SubforumId == subforumId);
+
+            switch (postsQueryDto.Order)
+            {
+                case PostOrdering.Newest:
+                    postsQuery = postsQuery.OrderByDescending(x => x.CreatedOn);
+                    break;
+                case PostOrdering.TopRated:
+                    postsQuery = postsQuery.OrderByDescending(x => x.Votes.Count(x => x.Type == PostVotes.Up) - x.Votes.Count(x => x.Type == PostVotes.Down));
+                    break;
+                case PostOrdering.Oldest:
+                    postsQuery = postsQuery.OrderBy(x => x.CreatedOn);
+                    break;
+            }
+
+            var posts = await postsQuery
+                .Skip((postsQueryDto.Page - 1) * 5)
+                .Take(5)
                 .Select(x => new PostListDto()
                 {
                     Id = x.Id,
@@ -189,13 +250,11 @@ namespace Services.Entity.Posts
                 })
                 .FirstOrDefaultAsync();
 
-
             if (postDetails is null)
             {
                 operationResult.AddError(new Error(ErrorTypes.NotFound, $"{nameof(Post)} with id: {id} was not found!"));
                 return operationResult;
             }
-
 
             operationResult.Data = postDetails;
 

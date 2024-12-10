@@ -4,6 +4,7 @@ using ForumApi.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models.DTOs.Posts.Input;
+using Models.DTOs.Posts.Output;
 
 namespace ForumApi.Controllers
 {
@@ -20,11 +21,26 @@ namespace ForumApi.Controllers
         }
 
         [AllowAnonymous]
-        [HttpGet]
+        [HttpPost]
         [Route("get-home-posts")]
-        public async Task<IActionResult> GetHomePagePosts()
+        public async Task<IActionResult> GetHomePagePosts([FromBody] PostsQueryDto postsQueryDto)
         {
-            var operationResult = await postManager.GetHomePagePostsAsync(User.GetId());
+            var operationResult = await postManager.GetHomePagePostsAsync(User.GetId(), postsQueryDto);
+
+            if (!operationResult.IsSuccessful)
+            {
+                return this.Error(operationResult);
+            }
+
+            return Ok(operationResult.Data);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("get-subforum-posts/{subforumId}")]
+        public async Task<IActionResult> GetHomePagePosts([FromRoute] long subforumId, [FromBody] PostsQueryDto postsQueryDto)
+        {
+            var operationResult = await postManager.GetSubforumPostsAsync(subforumId, User.GetId(), postsQueryDto);
 
             if (!operationResult.IsSuccessful)
             {
