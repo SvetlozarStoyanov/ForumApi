@@ -50,6 +50,7 @@ namespace Services.Entity.Subforums
                 Name = subforumCreateDto.Name,
                 CreatedOn = DateTime.UtcNow,
                 Administrators = new List<ApplicationUser>() { admin },
+                Users = new List<ApplicationUser>() { admin }
             };
 
             await unitOfWork.SubForumRepository.AddAsync(subforum);
@@ -59,7 +60,8 @@ namespace Services.Entity.Subforums
             return operationResult;
         }
 
-        public async Task<OperationResult<SubforumDetailsDto>> GetSubforumByNameAsync(string name)
+
+        public async Task<OperationResult<SubforumDetailsDto>> GetSubforumByNameForGuestUserAsync(string name)
         {
             var operationResult = new OperationResult<SubforumDetailsDto>();
 
@@ -68,16 +70,38 @@ namespace Services.Entity.Subforums
                 {
                     Id = x.Id,
                     Name = x.Name,
+                    UserIsMember = false
                 })
                 .FirstOrDefaultAsync();
 
             if (subforum is null)
             {
-                if (subforum is null)
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"{nameof(Subforum)} with name: {name} was not found!"));
+                return operationResult;
+            }
+
+            operationResult.Data = subforum;
+
+            return operationResult;
+        }
+
+        public async Task<OperationResult<SubforumDetailsDto>> GetSubforumByNameAsync(string name, string userId)
+        {
+            var operationResult = new OperationResult<SubforumDetailsDto>();
+
+            var subforum = await unitOfWork.SubForumRepository.FindByConditionAsNoTracking(x => x.Name.ToLower().Replace(" ", "") == name.ToLower().Replace(" ", ""))
+                .Select(x => new SubforumDetailsDto()
                 {
-                    operationResult.AddError(new Error(ErrorTypes.NotFound, $"{nameof(Subforum)} with name: {name} was not found!"));
-                    return operationResult;
-                }
+                    Id = x.Id,
+                    Name = x.Name,
+                    UserIsMember = x.Users.Any(x => x.Id == userId)
+                })
+                .FirstOrDefaultAsync();
+
+            if (subforum is null)
+            {
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"{nameof(Subforum)} with name: {name} was not found!"));
+                return operationResult;
             }
 
             operationResult.Data = subforum;
@@ -106,6 +130,31 @@ namespace Services.Entity.Subforums
             }
 
             subforum.Users.Add(user);
+
+            return operationResult;
+        }
+
+        public async Task<OperationResult> LeaveSubforumAsync(long subforumId, ApplicationUser user)
+        {
+            var operationResult = new OperationResult();
+
+            var subforum = await unitOfWork.SubForumRepository.FindByCondition(x => x.Id == subforumId)
+                .Include(x => x.Users.Where(x => x.Id == user.Id))
+                .FirstOrDefaultAsync();
+
+            if (subforum is null)
+            {
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"{nameof(Subforum)} with id: {subforumId} was not found!"));
+                return operationResult;
+            }
+
+            if (subforum.Users.Any(x => x.Id != user.Id))
+            {
+                operationResult.AddError(new Error(ErrorTypes.BadRequest, $"User with id: {user.Id} is not in {nameof(Subforum)} with id: {subforumId}"));
+                return operationResult;
+            }
+
+            subforum.Users.Remove(user);
 
             return operationResult;
         }

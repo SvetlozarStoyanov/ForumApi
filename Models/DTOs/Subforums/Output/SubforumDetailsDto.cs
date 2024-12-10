@@ -1,4 +1,4 @@
-﻿using Models.DTOs.Posts.Output;
+﻿
 
 namespace Models.DTOs.Subforums.Output
 {
@@ -6,6 +6,6 @@ namespace Models.DTOs.Subforums.Output
     {
         public long Id { get; set; }
         public string Name { get; set; }
-        public IEnumerable<PostListDto> Posts { get; set; }
+        public bool UserIsMember { get; set; }
     }
 }

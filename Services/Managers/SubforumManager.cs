@@ -39,17 +39,6 @@ namespace Services.Managers
             var operationResult = new OperationResult<SubforumDetailsDto>();
 
 
-            var fetchSubforumByNameResult = await subforumService.GetSubforumByNameAsync(name);
-
-
-            if (!fetchSubforumByNameResult.IsSuccessful)
-            {
-                operationResult.AppendErrors(fetchSubforumByNameResult);
-                return operationResult;
-            }
-
-            var subforumDto = fetchSubforumByNameResult.Data;
-
             if (userId is not null)
             {
                 var user = await unitOfWork.UserRepository.GetByIdAsync(userId);
@@ -61,10 +50,17 @@ namespace Services.Managers
                 }
             }
 
-            var subforumPosts = userId is not null ? await postService.GetSubforumPostsAsync(subforumDto.Id, userId)
-            : await postService.GetSubforumPostsForGuestUserAsync(subforumDto.Id);
+            var fetchSubforumByNameResult = userId is not null ? await subforumService.GetSubforumByNameAsync(name, userId) :
+                await subforumService.GetSubforumByNameForGuestUserAsync(name);
 
-            subforumDto.Posts = subforumPosts;
+            if (!fetchSubforumByNameResult.IsSuccessful)
+            {
+                operationResult.AppendErrors(fetchSubforumByNameResult);
+                return operationResult;
+            }
+
+            var subforumDto = fetchSubforumByNameResult.Data;
+
 
             operationResult.Data = subforumDto;
 
@@ -111,6 +107,31 @@ namespace Services.Managers
             }
 
             var joinForumResult = await subforumService.JoinSubforumAsync(subforumId, user);
+
+            if (!joinForumResult.IsSuccessful)
+            {
+                operationResult.AppendErrors(joinForumResult);
+                return operationResult;
+            }
+
+            await unitOfWork.SaveChangesAsync();
+
+            return operationResult;
+        }
+
+        public async Task<OperationResult> LeaveSubforumAsync(long subforumId, string userId)
+        {
+            var operationResult = new OperationResult();
+
+            var user = await unitOfWork.UserRepository.GetByIdAsync(userId);
+
+            if (user is null)
+            {
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
+                return operationResult;
+            }
+
+            var joinForumResult = await subforumService.LeaveSubforumAsync(subforumId, user);
 
             if (!joinForumResult.IsSuccessful)
             {

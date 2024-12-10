@@ -2,6 +2,7 @@
 using ForumApi.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Models.DTOs.Posts.Output;
 using Models.DTOs.Subforums.Input;
 
 namespace ForumApi.Controllers
@@ -39,7 +40,7 @@ namespace ForumApi.Controllers
 
         [AllowAnonymous]
         [HttpGet]
-        [Route("details/{name}")]
+        [Route("{name}")]
         public async Task<IActionResult> GetSubforumByNameAsync([FromRoute] string name)
         {
             var operationResult = await subforumManager.GetSubforumByNameAsync(name, User.GetId());
@@ -71,6 +72,20 @@ namespace ForumApi.Controllers
         public async Task<IActionResult> JoinSubforum([FromRoute] long id)
         {
             var operationResult = await subforumManager.JoinSubforumAsync(id, User.GetId());
+
+            if (!operationResult.IsSuccessful)
+            {
+                return this.Error(operationResult);
+            }
+
+            return Ok();
+        }
+
+        [HttpPost]
+        [Route("leave/{id}")]
+        public async Task<IActionResult> LeaveSubforum([FromRoute] long id)
+        {
+            var operationResult = await subforumManager.LeaveSubforumAsync(id, User.GetId());
 
             if (!operationResult.IsSuccessful)
             {

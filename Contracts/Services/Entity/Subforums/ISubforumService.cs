@@ -11,10 +11,14 @@ namespace Contracts.Services.Entity.Subforums
      
         Task<IEnumerable<SubforumDropdownDto>> GetSubforumsForDropdownAsync();
 
-        Task<OperationResult<SubforumDetailsDto>> GetSubforumByNameAsync(string name);
+        Task<OperationResult<SubforumDetailsDto>> GetSubforumByNameAsync(string name, string userId);
+
+        Task<OperationResult<SubforumDetailsDto>> GetSubforumByNameForGuestUserAsync(string name);
 
         Task<OperationResult<string>> CreateSubforumAsync(SubforumCreateDto subforumCreateDto, ApplicationUser admin);
 
         Task<OperationResult> JoinSubforumAsync(long subforumId, ApplicationUser user);
+
+        Task<OperationResult> LeaveSubforumAsync(long subforumId, ApplicationUser user);
     }
 }
