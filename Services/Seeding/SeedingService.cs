@@ -127,7 +127,7 @@ namespace Services.Seeding
         {
             new Subforum
             {
-                Name = "Cat Grooming",
+                Name = "catgrooming",
                 Users = users.Take(10).ToList(),
                 CreatedOn = DateTime.UtcNow.AddDays(-2),
                 Administrators = new ApplicationUser[]
@@ -197,7 +197,7 @@ namespace Services.Seeding
             },
             new Subforum
             {
-                Name = "Workout tips",
+                Name = "workouttips",
                 Users = users.Skip(10).Take(20).ToList(),
                 CreatedOn = DateTime.UtcNow.AddDays(-4),
                 Administrators = new ApplicationUser[]
@@ -297,6 +297,815 @@ namespace Services.Seeding
                     }
                 }
             },
+            new Subforum
+            {
+                Name = "nutritionadvice",
+                Users = users.Skip(30).Take(20).ToList(),
+                CreatedOn = DateTime.UtcNow.AddDays(-10),
+                Administrators = new ApplicationUser[]
+                {
+                    users[35],
+                },
+                Posts = new List<Post>()
+                {
+                    new Post
+                    {
+                        Title = "What's the best source of protein for vegans?",
+                        Text = "I am trying to follow a vegan diet but struggle to find high-protein options. Does anyone have any recommendations?",
+                        User = users[32],
+                        CreatedOn = DateTime.UtcNow.AddDays(-5),
+                        UpdatedOn = DateTime.UtcNow.AddDays(-5),
+                        Votes = new List<PostVote>()
+                        {
+                            new PostVote()
+                            {
+                                User = users[32],
+                                Type = PostVotes.Up,
+                                CreatedOn = DateTime.UtcNow.AddDays(-5)
+                            },
+                            new PostVote()
+                            {
+                                User = users[38],
+                                Type = PostVotes.Up,
+                                CreatedOn = DateTime.UtcNow.AddDays(-5)
+                            },
+                            new PostVote()
+                            {
+                                User = users[40],
+                                Type = PostVotes.Down,
+                                CreatedOn = DateTime.UtcNow.AddDays(-5)
+                            },
+                        },
+                        Comments = new List<Comment>()
+                        {
+                            new Comment()
+                            {
+                                User = users[41],
+                                CreatedOn = DateTime.UtcNow.AddDays(-3),
+                                UpdatedOn = DateTime.UtcNow.AddDays(-3),
+                                Text = "Tofu, tempeh, lentils, chickpeas, and edamame are all great vegan protein sources.",
+                                Votes = new List<CommentVote>()
+                                {
+                                    new CommentVote
+                                    {
+                                        User = users[32],
+                                        CreatedOn = DateTime.UtcNow.AddDays(-3),
+                                        Type = CommentVotes.Up,
+                                    },
+                                    new CommentVote
+                                    {
+                                        User = users[38],
+                                        CreatedOn = DateTime.UtcNow.AddDays(-3),
+                                        Type = CommentVotes.Up,
+                                    },
+                                    new CommentVote
+                                    {
+                                        User = users[40],
+                                        CreatedOn = DateTime.UtcNow.AddDays(-3),
+                                        Type = CommentVotes.Up,
+                                    },
+                                },
+                                Replies = new List<CommentReply>()
+                                {
+                                    new CommentReply
+                                    {
+                                        User = users[32],
+                                        CreatedOn = DateTime.UtcNow.AddDays(-2),
+                                        UpdatedOn = DateTime.UtcNow.AddDays(-2),
+                                        Text = "Great, I’ll start adding those to my meals!"
+                                    },
+                                    new CommentReply
+                                    {
+                                        User = users[40],
+                                        CreatedOn = DateTime.UtcNow.AddDays(-2),
+                                        UpdatedOn = DateTime.UtcNow.AddDays(-2),
+                                        Text = "But aren’t those sources a bit low in protein per serving?"
+                                    }
+                                }
+                            }
+                        },
+                    }
+                }
+            },
+            new Subforum
+            {
+                Name = "programming",
+                Users = users.Skip(50).Take(20).ToList(),
+                CreatedOn = DateTime.UtcNow.AddDays(-7),
+                Administrators = new ApplicationUser[]
+                {
+                    users[52],
+                },
+                Posts = new List<Post>()
+                {
+                    new Post
+                    {
+                        Title = "How to debug a NullReferenceException in C#?",
+                        Text = "I keep getting a NullReferenceException when I run my C# code. I can’t figure out why it happens. Does anyone have some tips on how to debug it?",
+                        User = users[53],
+                        CreatedOn = DateTime.UtcNow.AddDays(-3),
+                        UpdatedOn = DateTime.UtcNow.AddDays(-3),
+                        Votes = new List<PostVote>()
+                        {
+                            new PostVote()
+                            {
+                                User = users[53],
+                                Type = PostVotes.Up,
+                                CreatedOn = DateTime.UtcNow.AddDays(-3)
+                            },
+                            new PostVote()
+                            {
+                                User = users[59],
+                                Type = PostVotes.Up,
+                                CreatedOn = DateTime.UtcNow.AddDays(-3)
+                            },
+                            new PostVote()
+                            {
+                                User = users[61],
+                                Type = PostVotes.Down,
+                                CreatedOn = DateTime.UtcNow.AddDays(-3)
+                            },
+                        },
+                        Comments = new List<Comment>()
+                        {
+                            new Comment()
+                            {
+                                User = users[62],
+                                CreatedOn = DateTime.UtcNow.AddDays(-2),
+                                UpdatedOn = DateTime.UtcNow.AddDays(-2),
+                                Text = "A common cause is trying to access a property or method of an object that is null. Check for null values before accessing objects or methods.",
+                                Votes = new List<CommentVote>()
+                                {
+                                    new CommentVote
+                                    {
+                                        User = users[53],
+                                        CreatedOn = DateTime.UtcNow.AddDays(-2),
+                                        Type = CommentVotes.Up,
+                                    },
+                                    new CommentVote
+                                    {
+                                        User = users[59],
+                                        CreatedOn = DateTime.UtcNow.AddDays(-2),
+                                        Type = CommentVotes.Up,
+                                    },
+                                },
+                                Replies = new List<CommentReply>()
+                                {
+                                    new CommentReply
+                                    {
+                                        User = users[53],
+                                        CreatedOn = DateTime.UtcNow.AddDays(-1),
+                                        UpdatedOn = DateTime.UtcNow.AddDays(-1),
+                                        Text = "Thanks! I’ll check the null values. That might be the issue."
+                                    },
+                                    new CommentReply
+                                    {
+                                        User = users[61],
+                                        CreatedOn = DateTime.UtcNow.AddDays(-1),
+                                        UpdatedOn = DateTime.UtcNow.AddDays(-1),
+                                        Text = "Also, you can use Visual Studio’s built-in debugger to step through the code and see exactly where it breaks."
+                                    }
+                                }
+                            }
+                        },
+                    }
+                }
+            },
+            new Subforum
+            {
+                Name = "tourism",
+                Users = users.Skip(70).Take(30).ToList(),
+                CreatedOn = DateTime.UtcNow.AddDays(-15),
+                Administrators = new ApplicationUser[]
+                {
+                    users[75],
+                },
+                Posts = new List<Post>()
+                {
+                    new Post
+                    {
+                        Title = "Best time to visit Paris?",
+                        Text = "I am planning a trip to Paris. What time of year do you think is the best for sightseeing?",
+                        User = users[72],
+                        CreatedOn = DateTime.UtcNow.AddDays(-14),
+                        UpdatedOn = DateTime.UtcNow.AddDays(-14),
+                        Votes = new List<PostVote>()
+                        {
+                            new PostVote() { User = users[72], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-14) },
+                            new PostVote() { User = users[79], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-14) },
+                        },
+                        Comments = new List<Comment>()
+                        {
+                            new Comment()
+                            {
+                                User = users[80],
+                                CreatedOn = DateTime.UtcNow.AddDays(-12),
+                                UpdatedOn = DateTime.UtcNow.AddDays(-12),
+                                Text = "Spring or fall is a great time to visit Paris as the weather is pleasant and there are fewer tourists.",
+                                Votes = new List<CommentVote>()
+                                {
+                                    new CommentVote() { User = users[72], CreatedOn = DateTime.UtcNow.AddDays(-12), Type = CommentVotes.Up },
+                                    new CommentVote() { User = users[79], CreatedOn = DateTime.UtcNow.AddDays(-12), Type = CommentVotes.Up },
+                                },
+                            }
+                        },
+                    },
+                    new Post
+                    {
+                        Title = "Best beach destinations in Southeast Asia?",
+                        Text = "I'm looking for beautiful and less crowded beach destinations in Southeast Asia. Any recommendations?",
+                        User = users[73],
+                        CreatedOn = DateTime.UtcNow.AddDays(-13),
+                        UpdatedOn = DateTime.UtcNow.AddDays(-13),
+                        Votes = new List<PostVote>()
+                        {
+                            new PostVote() { User = users[73], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-13) },
+                            new PostVote() { User = users[76], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-13) },
+                        },
+                        Comments = new List<Comment>()
+                        {
+                            new Comment()
+                            {
+                                User = users[77],
+                                CreatedOn = DateTime.UtcNow.AddDays(-11),
+                                UpdatedOn = DateTime.UtcNow.AddDays(-11),
+                                Text = "Consider visiting Koh Lanta in Thailand or the island of Palawan in the Philippines. Both are stunning and quieter than popular destinations.",
+                                Votes = new List<CommentVote>()
+                                {
+                                    new CommentVote() { User = users[73], CreatedOn = DateTime.UtcNow.AddDays(-11), Type = CommentVotes.Up },
+                                    new CommentVote() { User = users[76], CreatedOn = DateTime.UtcNow.AddDays(-11), Type = CommentVotes.Up },
+                                },
+                            }
+                        },
+                    },
+                    new Post
+                    {
+                        Title = "What to do in Tokyo for 3 days?",
+                        Text = "I'll be in Tokyo for 3 days. What are some must-see places or activities for first-time visitors?",
+                        User = users[74],
+                        CreatedOn = DateTime.UtcNow.AddDays(-12),
+                        UpdatedOn = DateTime.UtcNow.AddDays(-12),
+                        Votes = new List<PostVote>()
+                        {
+                            new PostVote() { User = users[74], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-12) },
+                            new PostVote() { User = users[81], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-12) },
+                        },
+                        Comments = new List<Comment>()
+                        {
+                            new Comment()
+                            {
+                                User = users[82],
+                                CreatedOn = DateTime.UtcNow.AddDays(-10),
+                                UpdatedOn = DateTime.UtcNow.AddDays(-10),
+                                Text = "You must visit Shibuya Crossing, the Senso-ji Temple, and Tokyo Skytree. Don't forget to explore Akihabara for electronics and anime!",
+                                Votes = new List<CommentVote>()
+                                {
+                                    new CommentVote() { User = users[74], CreatedOn = DateTime.UtcNow.AddDays(-10), Type = CommentVotes.Up },
+                                    new CommentVote() { User = users[81], CreatedOn = DateTime.UtcNow.AddDays(-10), Type = CommentVotes.Up },
+                                },
+                            }
+                        },
+                    },
+                    new Post
+                    {
+                        Title = "What are the best hiking spots in New Zealand?",
+                        Text = "I love hiking and I’ll be in New Zealand for a month. Can anyone recommend the best trails?",
+                        User = users[75],
+                        CreatedOn = DateTime.UtcNow.AddDays(-11),
+                        UpdatedOn = DateTime.UtcNow.AddDays(-11),
+                        Votes = new List<PostVote>()
+                        {
+                            new PostVote() { User = users[75], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-11) },
+                            new PostVote() { User = users[83], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-11) },
+                        },
+                        Comments = new List<Comment>()
+                        {
+                            new Comment()
+                            {
+                                User = users[84],
+                                CreatedOn = DateTime.UtcNow.AddDays(-9),
+                                UpdatedOn = DateTime.UtcNow.AddDays(-9),
+                                Text = "You can't miss the Tongariro Alpine Crossing and Routeburn Track. Both offer stunning views of mountains and lakes.",
+                                Votes = new List<CommentVote>()
+                                {
+                                    new CommentVote() { User = users[75], CreatedOn = DateTime.UtcNow.AddDays(-9), Type = CommentVotes.Up },
+                                    new CommentVote() { User = users[83], CreatedOn = DateTime.UtcNow.AddDays(-9), Type = CommentVotes.Up },
+                                },
+                            }
+                        },
+                    },
+                    new Post
+                    {
+                        Title = "Exploring Italy on a budget",
+                        Text = "I'm planning to travel to Italy but have a limited budget. Any tips for budget-friendly travel in Italy?",
+                        User = users[76],
+                        CreatedOn = DateTime.UtcNow.AddDays(-10),
+                        UpdatedOn = DateTime.UtcNow.AddDays(-10),
+                        Votes = new List<PostVote>()
+                        {
+                            new PostVote() { User = users[76], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-10) },
+                            new PostVote() { User = users[88], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-10) },
+                        },
+                        Comments = new List<Comment>()
+                        {
+                            new Comment()
+                            {
+                                User = users[89],
+                                CreatedOn = DateTime.UtcNow.AddDays(-8),
+                                UpdatedOn = DateTime.UtcNow.AddDays(-8),
+                                Text = "Try to visit less touristy cities like Bologna or Puglia. You can also find budget hostels and enjoy great food without spending much.",
+                                Votes = new List<CommentVote>()
+                                {
+                                    new CommentVote() { User = users[76], CreatedOn = DateTime.UtcNow.AddDays(-8), Type = CommentVotes.Up },
+                                    new CommentVote() { User = users[88], CreatedOn = DateTime.UtcNow.AddDays(-8), Type = CommentVotes.Up },
+                                },
+                            }
+                        },
+                    },
+                    new Post
+                    {
+                        Title = "How to avoid tourist traps in Rome?",
+                        Text = "Rome is a popular tourist destination, but I've heard there are lots of tourist traps. How can I avoid them?",
+                        User = users[78],
+                        CreatedOn = DateTime.UtcNow.AddDays(-9),
+                        UpdatedOn = DateTime.UtcNow.AddDays(-9),
+                        Votes = new List<PostVote>()
+                        {
+                            new PostVote() { User = users[78], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-9) },
+                            new PostVote() { User = users[90], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-9) },
+                        },
+                        Comments = new List<Comment>()
+                        {
+                            new Comment()
+                            {
+                                User = users[91],
+                                CreatedOn = DateTime.UtcNow.AddDays(-7),
+                                UpdatedOn = DateTime.UtcNow.AddDays(-7),
+                                Text = "Try to avoid eating in restaurants near major landmarks like the Colosseum. They tend to be overpriced. Go a few streets away to find better food at better prices.",
+                                Votes = new List<CommentVote>()
+                                {
+                                    new CommentVote() { User = users[78], CreatedOn = DateTime.UtcNow.AddDays(-7), Type = CommentVotes.Up },
+                                    new CommentVote() { User = users[90], CreatedOn = DateTime.UtcNow.AddDays(-7), Type = CommentVotes.Up },
+                                },
+                            }
+                        },
+                    },
+                    new Post
+                    {
+                        Title = "Top attractions in Dubai",
+                        Text = "I'm heading to Dubai next month. What are the must-see attractions and experiences there?",
+                        User = users[80],
+                        CreatedOn = DateTime.UtcNow.AddDays(-8),
+                        UpdatedOn = DateTime.UtcNow.AddDays(-8),
+                        Votes = new List<PostVote>()
+                        {
+                            new PostVote() { User = users[80], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-8) },
+                            new PostVote() { User = users[92], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-8) },
+                        },
+                        Comments = new List<Comment>()
+                        {
+                            new Comment()
+                            {
+                                User = users[93],
+                                CreatedOn = DateTime.UtcNow.AddDays(-6),
+                                UpdatedOn = DateTime.UtcNow.AddDays(-6),
+                                Text = "The Burj Khalifa is a must-visit, as well as the Dubai Mall and Dubai Fountain. If you're into desert adventures, try a desert safari!",
+                                Votes = new List<CommentVote>()
+                                {
+                                    new CommentVote() { User = users[80], CreatedOn = DateTime.UtcNow.AddDays(-6), Type = CommentVotes.Up },
+                                    new CommentVote() { User = users[92], CreatedOn = DateTime.UtcNow.AddDays(-6), Type = CommentVotes.Up },
+                                },
+                            }
+                        },
+                    },
+                    new Post
+                    {
+                        Title = "What are some off-the-beaten-path destinations in Europe?",
+                        Text = "I'm looking for some hidden gems in Europe that are not overcrowded with tourists. Any recommendations?",
+                        User = users[82],
+                        CreatedOn = DateTime.UtcNow.AddDays(-7),
+                        UpdatedOn = DateTime.UtcNow.AddDays(-7),
+                        Votes = new List<PostVote>()
+                        {
+                            new PostVote() { User = users[82], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-7) },
+                            new PostVote() { User = users[94], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-7) },
+                        },
+                        Comments = new List<Comment>()
+                        {
+                            new Comment()
+                            {
+                                User = users[95],
+                                CreatedOn = DateTime.UtcNow.AddDays(-5),
+                                UpdatedOn = DateTime.UtcNow.AddDays(-5),
+                                Text = "Consider visiting places like Ljubljana in Slovenia, the coastal town of Rovinj in Croatia, or the island of Gotland in Sweden. They're beautiful and less crowded.",
+                                Votes = new List<CommentVote>()
+                                {
+                                    new CommentVote() { User = users[82], CreatedOn = DateTime.UtcNow.AddDays(-5), Type = CommentVotes.Up },
+                                    new CommentVote() { User = users[94], CreatedOn = DateTime.UtcNow.AddDays(-5), Type = CommentVotes.Up },
+                                },
+                            }
+                        },
+                    },
+                    new Post
+                    {
+                        Title = "Best way to travel around Japan",
+                        Text = "I'm planning a trip to Japan. What is the best way to get around the country? Should I get a JR Pass?",
+                        User = users[84],
+                        CreatedOn = DateTime.UtcNow.AddDays(-6),
+                        UpdatedOn = DateTime.UtcNow.AddDays(-6),
+                        Votes = new List<PostVote>()
+                        {
+                            new PostVote() { User = users[84], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-6) },
+                            new PostVote() { User = users[96], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-6) },
+                        },
+                        Comments = new List<Comment>()
+                        {
+                            new Comment()
+                            {
+                                User = users[97],
+                                CreatedOn = DateTime.UtcNow.AddDays(-4),
+                                UpdatedOn = DateTime.UtcNow.AddDays(-4),
+                                Text = "Yes, the JR Pass is a good deal for long-distance travel. For local travel, use the metro or buses. They're reliable and efficient.",
+                                Votes = new List<CommentVote>()
+                                {
+                                    new CommentVote() { User = users[84], CreatedOn = DateTime.UtcNow.AddDays(-4), Type = CommentVotes.Up },
+                                    new CommentVote() { User = users[96], CreatedOn = DateTime.UtcNow.AddDays(-4), Type = CommentVotes.Up },
+                                },
+                            }
+                        },
+                    },
+                    new Post
+                    {
+                        Title = "Is Iceland worth the visit?",
+                        Text = "Iceland looks amazing with all its landscapes. Is it worth the cost and time for a trip?",
+                        User = users[86],
+                        CreatedOn = DateTime.UtcNow.AddDays(-5),
+                        UpdatedOn = DateTime.UtcNow.AddDays(-5),
+                        Votes = new List<PostVote>()
+                        {
+                            new PostVote() { User = users[86], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-5) },
+                            new PostVote() { User = users[98], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-5) },
+                        },
+                        Comments = new List<Comment>()
+                        {
+                            new Comment()
+                            {
+                                User = users[99],
+                                CreatedOn = DateTime.UtcNow.AddDays(-3),
+                                UpdatedOn = DateTime.UtcNow.AddDays(-3),
+                                Text = "Yes, Iceland is absolutely worth it! The landscapes are otherworldly, from geysers to waterfalls, and the Northern Lights are spectacular.",
+                                Votes = new List<CommentVote>()
+                                {
+                                    new CommentVote() { User = users[86], CreatedOn = DateTime.UtcNow.AddDays(-3), Type = CommentVotes.Up },
+                                    new CommentVote() { User = users[98], CreatedOn = DateTime.UtcNow.AddDays(-3), Type = CommentVotes.Up },
+                                },
+                            }
+                        },
+                    },
+                    new Post
+                    {
+                        Title = "How to travel through Europe by train?",
+                        Text = "I'm thinking about using the train to explore Europe. Is it a good way to travel between countries?",
+                        User = users[88],
+                        CreatedOn = DateTime.UtcNow.AddDays(-4),
+                        UpdatedOn = DateTime.UtcNow.AddDays(-4),
+                        Votes = new List<PostVote>()
+                        {
+                            new PostVote() { User = users[88], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-4) },
+                            new PostVote() { User = users[99], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-4) },
+                        },
+                        Comments = new List<Comment>()
+                        {
+                            new Comment()
+                            {
+                                User = users[97],
+                                CreatedOn = DateTime.UtcNow.AddDays(-2),
+                                UpdatedOn = DateTime.UtcNow.AddDays(-2),
+                                Text = "Train travel in Europe is fantastic! It's affordable, scenic, and comfortable. You can easily travel between most countries with a Eurail pass.",
+                                Votes = new List<CommentVote>()
+                                {
+                                    new CommentVote() { User = users[88], CreatedOn = DateTime.UtcNow.AddDays(-2), Type = CommentVotes.Up },
+                                    new CommentVote() { User = users[99], CreatedOn = DateTime.UtcNow.AddDays(-2), Type = CommentVotes.Up },
+                                },
+                            }
+                        },
+                    },
+                    new Post
+                    {
+                        Title = "Best safari destinations in Africa",
+                        Text = "I want to go on a safari in Africa. What are some of the best places to visit for a memorable safari experience?",
+                        User = users[90],
+                        CreatedOn = DateTime.UtcNow.AddDays(-3),
+                        UpdatedOn = DateTime.UtcNow.AddDays(-3),
+                        Votes = new List<PostVote>()
+                        {
+                            new PostVote() { User = users[90], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-3) },
+                            new PostVote() { User = users[97], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-3) },
+                        },
+                        Comments = new List<Comment>()
+                        {
+                            new Comment()
+                            {
+                                User = users[88],
+                                CreatedOn = DateTime.UtcNow.AddDays(-1),
+                                UpdatedOn = DateTime.UtcNow.AddDays(-1),
+                                Text = "Serengeti National Park in Tanzania and Kruger National Park in South Africa are both fantastic for safaris. You’ll see the Big Five!",
+                                Votes = new List<CommentVote>()
+                                {
+                                    new CommentVote() { User = users[90], CreatedOn = DateTime.UtcNow.AddDays(-1), Type = CommentVotes.Up },
+                                    new CommentVote() { User = users[99], CreatedOn = DateTime.UtcNow.AddDays(-1), Type = CommentVotes.Up },
+                                },
+                            }
+                        },
+                    },
+                    new Post
+                    {
+                        Title = "Is a guided tour necessary in Egypt?",
+                        Text = "I’m considering visiting Egypt. Is it worth going with a guided tour, or can I explore on my own?",
+                        User = users[92],
+                        CreatedOn = DateTime.UtcNow.AddDays(-2),
+                        UpdatedOn = DateTime.UtcNow.AddDays(-2),
+                        Votes = new List<PostVote>()
+                        {
+                            new PostVote() { User = users[92], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-2) },
+                            new PostVote() { User = users[95], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-2) },
+                        },
+                        Comments = new List<Comment>()
+                        {
+                            new Comment()
+                            {
+                                User = users[95],
+                                CreatedOn = DateTime.UtcNow.AddDays(-2),
+                                UpdatedOn = DateTime.UtcNow.AddDays(-2),
+                                Text = "A guided tour is a good option in Egypt, especially to understand the history and culture. The pyramids, temples, and tombs can be overwhelming without context.",
+                                Votes = new List<CommentVote>()
+                                {
+                                    new CommentVote() { User = users[92], CreatedOn = DateTime.UtcNow.AddDays(0), Type = CommentVotes.Up },
+                                    new CommentVote() { User = users[91], CreatedOn = DateTime.UtcNow.AddDays(0), Type = CommentVotes.Up },
+                                },
+                            }
+                        },
+                    },
+                    new Post
+                    {
+                        Title = "How to explore Brazil’s Amazon rainforest?",
+                        Text = "I'm fascinated by the Amazon and would love to visit. What's the best way to explore the rainforest in Brazil?",
+                        User = users[94],
+                        CreatedOn = DateTime.UtcNow.AddDays(-1),
+                        UpdatedOn = DateTime.UtcNow.AddDays(-1),
+                        Votes = new List<PostVote>()
+                        {
+                            new PostVote() { User = users[94], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(1) },
+                            new PostVote() { User = users[98], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(1) },
+                        },
+                        Comments = new List<Comment>()
+                        {
+                            new Comment()
+                            {
+                                User = users[98],
+                                CreatedOn = DateTime.UtcNow.AddDays(-3),
+                                UpdatedOn = DateTime.UtcNow.AddDays(-3),
+                                Text = "A guided jungle tour is a great way to experience the Amazon. Most tours will include visits to local tribes and wildlife watching in the rainforest.",
+                                Votes = new List<CommentVote>()
+                                {
+                                    new CommentVote() { User = users[94], CreatedOn = DateTime.UtcNow.AddDays(3), Type = CommentVotes.Up },
+                                    new CommentVote() { User = users[99], CreatedOn = DateTime.UtcNow.AddDays(3), Type = CommentVotes.Up },
+                                },
+                            }
+                        },
+                    },
+                }
+            },
+            new Subforum
+            {
+                Name = "spacescience",
+                Users = users.Skip(30).Take(30).ToList(),
+                CreatedOn = DateTime.UtcNow.AddDays(-30),
+                Administrators = new ApplicationUser[]
+                {
+                    users[35], // Admin user
+                },
+                Posts = new List<Post>()
+                {
+                    new Post
+                    {
+                        Title = "What is the significance of the James Webb Space Telescope?",
+                        Text = "With the recent deployment of the James Webb Space Telescope (JWST), how is it expected to change our understanding of the universe? What are the primary scientific goals of JWST?",
+                        User = users[31],
+                        CreatedOn = DateTime.UtcNow.AddDays(-28),
+                        UpdatedOn = DateTime.UtcNow.AddDays(-28),
+                        Votes = new List<PostVote>()
+                        {
+                            new PostVote() { User = users[31], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-28) },
+                            new PostVote() { User = users[40], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-28) },
+                        },
+                        Comments = new List<Comment>()
+                        {
+                            new Comment()
+                            {
+                                User = users[41],
+                                CreatedOn = DateTime.UtcNow.AddDays(-25),
+                                UpdatedOn = DateTime.UtcNow.AddDays(-25),
+                                Text = "JWST is set to provide unprecedented images of distant galaxies, helping us understand the early universe. It's also crucial for studying exoplanets and their atmospheres.",
+                                Votes = new List<CommentVote>()
+                                {
+                                    new CommentVote() { User = users[31], CreatedOn = DateTime.UtcNow.AddDays(-25), Type = CommentVotes.Up },
+                                },
+                            }
+                        },
+                    },
+                    new Post
+                    {
+                        Title = "Can black holes be detected without visible light?",
+                        Text = "How do scientists detect black holes, considering that they don't emit visible light? What methods are used to study them?",
+                        User = users[33],
+                        CreatedOn = DateTime.UtcNow.AddDays(-26),
+                        UpdatedOn = DateTime.UtcNow.AddDays(-26),
+                        Votes = new List<PostVote>()
+                        {
+                            new PostVote() { User = users[33], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-26) },
+                            new PostVote() { User = users[45], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-26) },
+                        },
+                        Comments = new List<Comment>()
+                        {
+                            new Comment()
+                            {
+                                User = users[47],
+                                CreatedOn = DateTime.UtcNow.AddDays(-24),
+                                UpdatedOn = DateTime.UtcNow.AddDays(-24),
+                                Text = "Black holes are detected through their gravitational effects on nearby objects and light. X-ray emissions from the accretion disk around black holes also give us clues.",
+                                Votes = new List<CommentVote>()
+                                {
+                                    new CommentVote() { User = users[33], CreatedOn = DateTime.UtcNow.AddDays(-24), Type = CommentVotes.Up },
+                                },
+                            }
+                        },
+                    },
+                    new Post
+                    {
+                        Title = "What are gravitational waves and why are they important?",
+                        Text = "Gravitational waves were detected for the first time in 2015. Why is this such an important discovery in space science?",
+                        User = users[35],
+                        CreatedOn = DateTime.UtcNow.AddDays(-20),
+                        UpdatedOn = DateTime.UtcNow.AddDays(-20),
+                        Votes = new List<PostVote>()
+                        {
+                            new PostVote() { User = users[35], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-20) },
+                            new PostVote() { User = users[50], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-20) },
+                        },
+                        Comments = new List<Comment>()
+                        {
+                            new Comment()
+                            {
+                                User = users[51],
+                                CreatedOn = DateTime.UtcNow.AddDays(-18),
+                                UpdatedOn = DateTime.UtcNow.AddDays(-18),
+                                Text = "Gravitational waves open up a new way of observing the universe. They allow us to study events like black hole mergers, which would be invisible to traditional telescopes.",
+                                Votes = new List<CommentVote>()
+                                {
+                                    new CommentVote() { User = users[35], CreatedOn = DateTime.UtcNow.AddDays(-18), Type = CommentVotes.Up },
+                                },
+                            }
+                        },
+                    },
+                    new Post
+                    {
+                        Title = "Could there be life on Europa?",
+                        Text = "Europa, one of Jupiter's moons, is believed to have a subsurface ocean. What are the chances that this could harbor life?",
+                        User = users[38],
+                        CreatedOn = DateTime.UtcNow.AddDays(-18),
+                        UpdatedOn = DateTime.UtcNow.AddDays(-18),
+                        Votes = new List<PostVote>()
+                        {
+                            new PostVote() { User = users[38], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-18) },
+                            new PostVote() { User = users[54], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-18) },
+                        },
+                        Comments = new List<Comment>()
+                        {
+                            new Comment()
+                            {
+                                User = users[56],
+                                CreatedOn = DateTime.UtcNow.AddDays(-15),
+                                UpdatedOn = DateTime.UtcNow.AddDays(-15),
+                                Text = "Europa has the necessary ingredients for life: water, energy, and organic molecules. It's a prime target for astrobiology research in the solar system.",
+                                Votes = new List<CommentVote>()
+                                {
+                                    new CommentVote() { User = users[38], CreatedOn = DateTime.UtcNow.AddDays(-15), Type = CommentVotes.Up },
+                                },
+                            }
+                        },
+                    },
+                    new Post
+                    {
+                        Title = "What is dark matter and why can't we see it?",
+                        Text = "Scientists believe that about 27% of the universe is made of dark matter, yet we cannot detect it directly. How do scientists know it exists, and what is its role in the universe?",
+                        User = users[41],
+                        CreatedOn = DateTime.UtcNow.AddDays(-14),
+                        UpdatedOn = DateTime.UtcNow.AddDays(-14),
+                        Votes = new List<PostVote>()
+                        {
+                            new PostVote() { User = users[41], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-14) },
+                            new PostVote() { User = users[57], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-14) },
+                        },
+                        Comments = new List<Comment>()
+                        {
+                            new Comment()
+                            {
+                                User = users[58],
+                                CreatedOn = DateTime.UtcNow.AddDays(-10),
+                                UpdatedOn = DateTime.UtcNow.AddDays(-10),
+                                Text = "Dark matter interacts with regular matter through gravity, but does not emit, absorb, or reflect light, which is why we can't see it. Its presence is inferred by its gravitational effects on visible matter.",
+                                Votes = new List<CommentVote>()
+                                {
+                                    new CommentVote() { User = users[41], CreatedOn = DateTime.UtcNow.AddDays(-10), Type = CommentVotes.Up },
+                                },
+                            }
+                        },
+                    },
+                    new Post
+                    {
+                        Title = "Is the search for extraterrestrial intelligence (SETI) a lost cause?",
+                        Text = "Given the vastness of the universe, do you think the search for extraterrestrial intelligence will ever be successful?",
+                        User = users[43],
+                        CreatedOn = DateTime.UtcNow.AddDays(-8),
+                        UpdatedOn = DateTime.UtcNow.AddDays(-8),
+                        Votes = new List<PostVote>()
+                        {
+                            new PostVote() { User = users[43], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-8) },
+                            new PostVote() { User = users[59], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-8) },
+                        },
+                        Comments = new List<Comment>()
+                        {
+                            new Comment()
+                            {
+                                User = users[60],
+                                CreatedOn = DateTime.UtcNow.AddDays(-6),
+                                UpdatedOn = DateTime.UtcNow.AddDays(-6),
+                                Text = "SETI may seem like a long shot, but given the number of exoplanets discovered, the potential for life elsewhere is significant. It's worth continuing to explore.",
+                                Votes = new List<CommentVote>()
+                                {
+                                    new CommentVote() { User = users[43], CreatedOn = DateTime.UtcNow.AddDays(-6), Type = CommentVotes.Up },
+                                },
+                            }
+                        },
+                    },
+                    new Post
+                    {
+                        Title = "How do astronauts prepare for space travel?",
+                        Text = "What are some of the key physical and psychological preparations astronauts go through before a space mission?",
+                        User = users[46],
+                        CreatedOn = DateTime.UtcNow.AddDays(-6),
+                        UpdatedOn = DateTime.UtcNow.AddDays(-6),
+                        Votes = new List<PostVote>()
+                        {
+                            new PostVote() { User = users[46], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-6) },
+                            new PostVote() { User = users[52], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-6) },
+                        },
+                        Comments = new List<Comment>()
+                        {
+                            new Comment()
+                            {
+                                User = users[53],
+                                CreatedOn = DateTime.UtcNow.AddDays(-3),
+                                UpdatedOn = DateTime.UtcNow.AddDays(-3),
+                                Text = "Astronauts undergo rigorous physical training to withstand the effects of microgravity, as well as psychological training to cope with isolation and stress during long missions.",
+                                Votes = new List<CommentVote>()
+                                {
+                                    new CommentVote() { User = users[46], CreatedOn = DateTime.UtcNow.AddDays(-3), Type = CommentVotes.Up },
+                                },
+                            }
+                        },
+                    },
+                    new Post
+                    {
+                        Title = "What are exoplanets, and how are they discovered?",
+                        Text = "What exactly are exoplanets, and what methods do scientists use to find planets orbiting other stars?",
+                        User = users[50],
+                        CreatedOn = DateTime.UtcNow.AddDays(-2),
+                        UpdatedOn = DateTime.UtcNow.AddDays(-2),
+                        Votes = new List<PostVote>()
+                        {
+                            new PostVote() { User = users[50], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-2) },
+                            new PostVote() { User = users[55], Type = PostVotes.Up, CreatedOn = DateTime.UtcNow.AddDays(-2) },
+                        },
+                        Comments = new List<Comment>()
+                        {
+                            new Comment()
+                            {
+                                User = users[57],
+                                CreatedOn = DateTime.UtcNow.AddDays(-1),
+                                UpdatedOn = DateTime.UtcNow.AddDays(-1),
+                                Text = "Exoplanets are planets outside our solar system. They are discovered using methods like the transit method, where the planet's shadow is seen crossing its star, or the radial velocity method, which detects the star's wobble.",
+                                Votes = new List<CommentVote>()
+                                {
+                                    new CommentVote() { User = users[50], CreatedOn = DateTime.UtcNow.AddDays(-1), Type = CommentVotes.Up },
+                                },
+                            }
+                        },
+                    },
+                }
+            },
+
         };
 
         public SeedingService(ForumDbContext context,
