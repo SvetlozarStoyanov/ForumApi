@@ -13,15 +13,55 @@ namespace Services.Managers
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly ISubforumService subforumService;
-        private readonly IPostService postService;
 
         public SubforumManager(IUnitOfWork unitOfWork,
-            ISubforumService subforumService,
-            IPostService postService)
+            ISubforumService subforumService)
         {
             this.unitOfWork = unitOfWork;
             this.subforumService = subforumService;
-            this.postService = postService;
+        }
+
+        public async Task<IEnumerable<SubforumListDto>> GetSubforumsForGuestUserAsync(SubforumsQueryDto subforumsQueryDto)
+        {
+            return await subforumService.GetSubforumsForGuestUserAsync(subforumsQueryDto);
+        }
+
+        public async Task<OperationResult<IEnumerable<SubforumListDto>>> GetUserUnjoinedSubforumsAsync(string userId, SubforumsQueryDto subforumsQueryDto)
+        {
+            var operationResult = new OperationResult<IEnumerable<SubforumListDto>>();
+
+            var user = await unitOfWork.UserRepository.GetByIdAsync(userId);
+
+            if (user is null)
+            {
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
+                return operationResult;
+            }
+
+            var subforums = await subforumService.GetUserUnjoinedSubforumsAsync(userId, subforumsQueryDto);
+
+            operationResult.Data = subforums;
+
+            return operationResult;
+        }
+
+        public async Task<OperationResult<IEnumerable<SubforumListDto>>> GetUserJoinedSubforumsAsync(string userId, SubforumsQueryDto subforumsQueryDto)
+        {
+            var operationResult = new OperationResult<IEnumerable<SubforumListDto>>();
+
+            var user = await unitOfWork.UserRepository.GetByIdAsync(userId);
+
+            if (user is null)
+            {
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"User with id: {userId} was not found!"));
+                return operationResult;
+            }
+
+            var subforums = await subforumService.GetUserJoinedSubforumsAsync(userId, subforumsQueryDto);
+
+            operationResult.Data = subforums;
+
+            return operationResult;
         }
 
         public async Task<IEnumerable<string>> GetAllSubforumNamesAsync()

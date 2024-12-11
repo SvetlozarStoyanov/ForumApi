@@ -19,6 +19,44 @@ namespace ForumApi.Controllers
             this.subforumManager = subforumManager;
         }
 
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("get-guest-user-subforums")]
+        public async Task<IActionResult> GetGuestUserSubforums(SubforumsQueryDto subforumsQueryDto)
+        {
+            var subforums = await subforumManager.GetSubforumsForGuestUserAsync(subforumsQueryDto);
+
+            return Ok(subforums);
+        }
+
+        [HttpPost]
+        [Route("get-user-unjoined-subforums")]
+        public async Task<IActionResult> GetUserUnjoinedSubforums(SubforumsQueryDto subforumsQueryDto)
+        {
+            var operationResult = await subforumManager.GetUserUnjoinedSubforumsAsync(User.GetId(), subforumsQueryDto);
+
+            if (!operationResult.IsSuccessful)
+            {
+                return this.Error(operationResult);
+            }
+
+            return Ok(operationResult.Data);
+        }
+
+        [HttpPost]
+        [Route("get-user-joined-subforums")]
+        public async Task<IActionResult> GetUserJoinedSubforums(SubforumsQueryDto subforumsQueryDto)
+        {
+            var operationResult = await subforumManager.GetUserJoinedSubforumsAsync(User.GetId(), subforumsQueryDto);
+
+            if (!operationResult.IsSuccessful)
+            {
+                return this.Error(operationResult);
+            }
+
+            return Ok(operationResult.Data);
+        }
+
 
         [HttpGet]
         [Route("all-names")]

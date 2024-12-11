@@ -19,6 +19,113 @@ namespace Services.Entity.Subforums
             this.unitOfWork = unitOfWork;
         }
 
+        public async Task<IEnumerable<SubforumListDto>> GetSubforumsForGuestUserAsync(SubforumsQueryDto subforumsQueryDto)
+        {
+            var subforumsQueryable = unitOfWork.SubForumRepository.AllAsNoTracking();
+
+            switch (subforumsQueryDto.Order)
+            {
+                case Models.Enums.Subforums.SubforumOrder.Newest:
+                    subforumsQueryable = subforumsQueryable.OrderByDescending(x => x.CreatedOn);
+                    break;
+                case Models.Enums.Subforums.SubforumOrder.MemberCount:
+                    subforumsQueryable = subforumsQueryable.OrderByDescending(x => x.Users.Count);
+                    break;
+                case Models.Enums.Subforums.SubforumOrder.PostCount:
+                    subforumsQueryable = subforumsQueryable.OrderByDescending(x => x.Posts.Count);
+                    break;
+                case Models.Enums.Subforums.SubforumOrder.Oldest:
+                    subforumsQueryable = subforumsQueryable.OrderBy(x => x.CreatedOn);
+                    break;
+            }
+
+            var subforums = await subforumsQueryable
+                .Skip((subforumsQueryDto.Page - 1) * 6)
+                .Take(6)
+                .Select(x => new SubforumListDto()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    MemberCount = x.Users.Count,
+                    UserIsMember = false,
+                })
+                .ToListAsync();
+
+            return subforums;
+        }
+
+        public async Task<IEnumerable<SubforumListDto>> GetUserUnjoinedSubforumsAsync(string userId, SubforumsQueryDto subforumsQueryDto)
+        {
+            var subforumsQueryable = unitOfWork.SubForumRepository.AllAsNoTracking()
+                .Where(x => x.Users.All(x => x.Id != userId));
+
+            switch (subforumsQueryDto.Order)
+            {
+                case Models.Enums.Subforums.SubforumOrder.Newest:
+                    subforumsQueryable = subforumsQueryable.OrderByDescending(x => x.CreatedOn);
+                    break;
+                case Models.Enums.Subforums.SubforumOrder.MemberCount:
+                    subforumsQueryable = subforumsQueryable.OrderByDescending(x => x.Users.Count);
+                    break;
+                case Models.Enums.Subforums.SubforumOrder.PostCount:
+                    subforumsQueryable = subforumsQueryable.OrderByDescending(x => x.Posts.Count);
+                    break;
+                case Models.Enums.Subforums.SubforumOrder.Oldest:
+                    subforumsQueryable = subforumsQueryable.OrderBy(x => x.CreatedOn);
+                    break;
+            }
+
+            var subforums = await subforumsQueryable
+                .Skip((subforumsQueryDto.Page - 1) * 6)
+                .Take(6)
+                .Select(x => new SubforumListDto()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    MemberCount = x.Users.Count,
+                    UserIsMember = false,
+                })
+                .ToListAsync();
+
+            return subforums;
+        }
+
+        public async Task<IEnumerable<SubforumListDto>> GetUserJoinedSubforumsAsync(string userId, SubforumsQueryDto subforumsQueryDto)
+        {
+            var subforumsQueryable = unitOfWork.SubForumRepository.AllAsNoTracking()
+                .Where(x => x.Users.Any(x => x.Id == userId));
+
+            switch (subforumsQueryDto.Order)
+            {
+                case Models.Enums.Subforums.SubforumOrder.Newest:
+                    subforumsQueryable = subforumsQueryable.OrderByDescending(x => x.CreatedOn);
+                    break;
+                case Models.Enums.Subforums.SubforumOrder.MemberCount:
+                    subforumsQueryable = subforumsQueryable.OrderByDescending(x => x.Users.Count);
+                    break;
+                case Models.Enums.Subforums.SubforumOrder.PostCount:
+                    subforumsQueryable = subforumsQueryable.OrderByDescending(x => x.Posts.Count);
+                    break;
+                case Models.Enums.Subforums.SubforumOrder.Oldest:
+                    subforumsQueryable = subforumsQueryable.OrderBy(x => x.CreatedOn);
+                    break;
+            }
+
+            var subforums = await subforumsQueryable
+                .Skip((subforumsQueryDto.Page - 1) * 6)
+                .Take(6)
+                .Select(x => new SubforumListDto()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    MemberCount = x.Users.Count,
+                    UserIsMember = true,
+                })
+                .ToListAsync();
+
+            return subforums;
+        }
+
         public async Task<IEnumerable<string>> GetAllSubforumNamesAsync()
         {
             var subforumNames = await unitOfWork.SubForumRepository.AllAsNoTracking()

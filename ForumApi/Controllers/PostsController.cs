@@ -4,7 +4,6 @@ using ForumApi.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models.DTOs.Posts.Input;
-using Models.DTOs.Posts.Output;
 
 namespace ForumApi.Controllers
 {

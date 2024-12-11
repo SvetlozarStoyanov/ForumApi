@@ -7,6 +7,12 @@ namespace Contracts.Services.Entity.Subforums
 {
     public interface ISubforumService
     {
+        Task<IEnumerable<SubforumListDto>> GetSubforumsForGuestUserAsync(SubforumsQueryDto subforumsQueryDto);
+
+        Task<IEnumerable<SubforumListDto>> GetUserUnjoinedSubforumsAsync(string userId, SubforumsQueryDto subforumsQueryDto);
+
+        Task<IEnumerable<SubforumListDto>> GetUserJoinedSubforumsAsync(string userId, SubforumsQueryDto subforumsQueryDto);
+        
         Task<IEnumerable<string>> GetAllSubforumNamesAsync();
      
         Task<IEnumerable<SubforumDropdownDto>> GetSubforumsForDropdownAsync();

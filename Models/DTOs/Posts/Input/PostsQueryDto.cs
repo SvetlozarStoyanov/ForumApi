@@ -1,6 +1,6 @@
 ﻿using Models.Enums.Posts;
 
-namespace Models.DTOs.Posts.Output
+namespace Models.DTOs.Posts.Input
 {
     public class PostsQueryDto
     {
