@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Database.Migrations
 {
     [DbContext(typeof(ForumDbContext))]
-    [Migration("20241129115748_Initial")]
+    [Migration("20241211093138_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -282,6 +282,10 @@ namespace Database.Migrations
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()

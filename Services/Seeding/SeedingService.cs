@@ -128,6 +128,7 @@ namespace Services.Seeding
             new Subforum
             {
                 Name = "catgrooming",
+                Description = "All topics regarding cat grooming routine",
                 Users = users.Take(10).ToList(),
                 CreatedOn = DateTime.UtcNow.AddDays(-2),
                 Administrators = new ApplicationUser[]
@@ -198,6 +199,7 @@ namespace Services.Seeding
             new Subforum
             {
                 Name = "workouttips",
+                Description = "Tips regarding workout programs, exercise form and fitness related topics",
                 Users = users.Skip(10).Take(20).ToList(),
                 CreatedOn = DateTime.UtcNow.AddDays(-4),
                 Administrators = new ApplicationUser[]
@@ -300,6 +302,7 @@ namespace Services.Seeding
             new Subforum
             {
                 Name = "nutritionadvice",
+                Description = "Proper nutrition is the key to a long and healthy life",
                 Users = users.Skip(30).Take(20).ToList(),
                 CreatedOn = DateTime.UtcNow.AddDays(-10),
                 Administrators = new ApplicationUser[]
@@ -390,6 +393,7 @@ namespace Services.Seeding
             new Subforum
             {
                 Name = "programming",
+                Description = "Computer Programming",
                 Users = users.Skip(50).Take(20).ToList(),
                 CreatedOn = DateTime.UtcNow.AddDays(-7),
                 Administrators = new ApplicationUser[]
@@ -474,6 +478,7 @@ namespace Services.Seeding
             new Subforum
             {
                 Name = "tourism",
+                Description = "Present and future trips",
                 Users = users.Skip(70).Take(30).ToList(),
                 CreatedOn = DateTime.UtcNow.AddDays(-15),
                 Administrators = new ApplicationUser[]
@@ -879,6 +884,7 @@ namespace Services.Seeding
             new Subforum
             {
                 Name = "spacescience",
+                Description = "Science, but in space!",
                 Users = users.Skip(30).Take(30).ToList(),
                 CreatedOn = DateTime.UtcNow.AddDays(-30),
                 Administrators = new ApplicationUser[]
@@ -1105,7 +1111,6 @@ namespace Services.Seeding
                     },
                 }
             },
-
         };
 
         public SeedingService(ForumDbContext context,

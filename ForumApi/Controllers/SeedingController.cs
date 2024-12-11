@@ -16,6 +16,7 @@ namespace ForumApi.Controllers
         }
 
         [HttpPost]
+        [Route("seed")]
         public async Task<IActionResult> SeedDatabase()
         {
             var operationResult = await seedingService.SeedAsync();

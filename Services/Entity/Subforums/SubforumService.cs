@@ -48,6 +48,7 @@ namespace Services.Entity.Subforums
             var subforum = new Subforum()
             {
                 Name = subforumCreateDto.Name,
+                Description = subforumCreateDto.Description,
                 CreatedOn = DateTime.UtcNow,
                 Administrators = new List<ApplicationUser>() { admin },
                 Users = new List<ApplicationUser>() { admin }
@@ -70,7 +71,9 @@ namespace Services.Entity.Subforums
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    UserIsMember = false
+                    Description = x.Description,
+                    UserIsMember = false,
+                    UserCount = x.Users.Count,
                 })
                 .FirstOrDefaultAsync();
 
@@ -94,7 +97,9 @@ namespace Services.Entity.Subforums
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    UserIsMember = x.Users.Any(x => x.Id == userId)
+                    Description = x.Description,
+                    UserIsMember = x.Users.Any(x => x.Id == userId),
+                    UserCount = x.Users.Count,
                 })
                 .FirstOrDefaultAsync();
 

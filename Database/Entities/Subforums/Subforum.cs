@@ -7,6 +7,7 @@ namespace Database.Entities.Subforums
     {
         public long Id { get; set; }
         public string Name { get; set; }
+        public string Description { get; set; }
         public DateTime CreatedOn { get; set; }
         public ICollection<ApplicationUser> Users { get; set; }
         public ICollection<ApplicationUser> Administrators { get; set; }
