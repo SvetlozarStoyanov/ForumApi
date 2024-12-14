@@ -7,9 +7,13 @@ namespace Contracts.Services.Managers
 {
     public interface IPostManager
     {
+        Task<OperationResult<IEnumerable<PostListDto>>> GetUserPostsAsync(string username, string? currentUserId, PostsQueryDto postsQueryDto);
+
         Task<OperationResult> VoteOnPostAsync(long postId, string userId, PostVotes type);
 
         Task<OperationResult<IEnumerable<PostListDto>>> GetHomePagePostsAsync(string? userId, PostsQueryDto postsQueryDto);
+
+        Task<IEnumerable<PostSearchDto>> SearchPostsAsync(string searchTerm);
 
         Task<OperationResult<PostDetailsDto>> GetPostDetailsByIdAsync(long id, string? userId);
 

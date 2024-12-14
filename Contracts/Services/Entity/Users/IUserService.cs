@@ -9,6 +9,10 @@ namespace Contracts.Services.Entity.Users
 
         Task<IEnumerable<string>> GetAllUsernamesAsync();
 
+        Task<IEnumerable<UserSearchDto>> SearchUsersAsync(string searchTerm);
+
+        Task<OperationResult<UserDetailsDto>> GetUserDetailsAsync(string userName);
+
         Task<OperationResult<UserShortInfoDto>> GetUserByIdAsync(string userId);
     }
 }

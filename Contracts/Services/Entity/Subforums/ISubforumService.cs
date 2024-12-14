@@ -17,6 +17,8 @@ namespace Contracts.Services.Entity.Subforums
      
         Task<IEnumerable<SubforumDropdownDto>> GetSubforumsForDropdownAsync();
 
+        Task<IEnumerable<SubforumSearchDto>> SearchSubforumsAsync(string searchTerm);
+       
         Task<OperationResult<SubforumDetailsDto>> GetSubforumByNameAsync(string name, string userId);
 
         Task<OperationResult<SubforumDetailsDto>> GetSubforumByNameForGuestUserAsync(string name);

@@ -26,6 +26,40 @@ namespace Services.Managers
             this.postVoteService = postVoteService;
         }
 
+        public async Task<OperationResult<IEnumerable<PostListDto>>> GetUserPostsAsync(string username,
+            string? currentUserId,
+            PostsQueryDto postsQueryDto)
+        {
+            var operationResult = new OperationResult<IEnumerable<PostListDto>>();
+
+            var user = await unitOfWork.UserRepository.FindByConditionAsNoTracking(x => x.UserName == username)
+                .FirstOrDefaultAsync();
+
+            if (user is null)
+            {
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"User with username: {username} was not found!"));
+                return operationResult;
+            }
+
+            if (currentUserId is not null)
+            {
+                var currentUser = await unitOfWork.UserRepository.GetByIdAsync(currentUserId);
+
+                if (currentUser is null)
+                {
+                    operationResult.AddError(new Error(ErrorTypes.NotFound, $"User with id: {currentUserId} was not found!"));
+                    return operationResult;
+                }
+            }
+
+            var posts = currentUserId is not null ? await postService.GetUserPostsAsync(user.Id, currentUserId, postsQueryDto) 
+                : await postService.GetUserPostsForGuestUserAsync(user.Id, postsQueryDto);
+
+            operationResult.Data = posts;
+
+            return operationResult;
+        }
+
         public async Task<OperationResult<IEnumerable<PostListDto>>> GetHomePagePostsAsync(string? userId, PostsQueryDto postsQueryDto)
         {
             var operationResult = new OperationResult<IEnumerable<PostListDto>>();
@@ -74,6 +108,11 @@ namespace Services.Managers
             operationResult.Data = fetchedPosts;
 
             return operationResult;
+        }
+
+        public async Task<IEnumerable<PostSearchDto>> SearchPostsAsync(string searchTerm)
+        {
+            return await postService.SearchPostsAsync(searchTerm);
         }
 
         public async Task<OperationResult<PostDetailsDto>> GetPostDetailsByIdAsync(long id, string? userId)

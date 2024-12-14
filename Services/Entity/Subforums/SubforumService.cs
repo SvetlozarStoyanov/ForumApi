@@ -168,6 +168,19 @@ namespace Services.Entity.Subforums
             return operationResult;
         }
 
+        public async Task<IEnumerable<SubforumSearchDto>> SearchSubforumsAsync(string searchTerm)
+        {
+            var subforums = await unitOfWork.SubForumRepository.FindByConditionAsNoTracking(x => x.Name.ToLower().Contains(searchTerm.ToLower()))
+                .Select(x => new SubforumSearchDto()
+                {
+                    Id = x.Id,
+                    Name = x.Name,
+                    MemberCount = x.Users.Count()
+                })
+                .ToListAsync();
+
+            return subforums;
+        }
 
         public async Task<OperationResult<SubforumDetailsDto>> GetSubforumByNameForGuestUserAsync(string name)
         {

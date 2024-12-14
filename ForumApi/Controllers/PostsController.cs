@@ -21,6 +21,22 @@ namespace ForumApi.Controllers
 
         [AllowAnonymous]
         [HttpPost]
+        [Route("get-user-posts/{username}")]
+        public async Task<IActionResult> GetUserPosts([FromRoute] string username,
+            [FromBody] PostsQueryDto postsQueryDto)
+        {
+            var operationResult = await postManager.GetUserPostsAsync(username, User.GetId(), postsQueryDto);
+            
+            if (!operationResult.IsSuccessful)
+            {
+                return this.Error(operationResult);
+            }
+
+            return Ok(operationResult.Data);
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
         [Route("get-home-posts")]
         public async Task<IActionResult> GetHomePagePosts([FromBody] PostsQueryDto postsQueryDto)
         {
@@ -47,6 +63,16 @@ namespace ForumApi.Controllers
             }
 
             return Ok(operationResult.Data);
+        }
+
+        [AllowAnonymous]
+        [HttpGet()]
+        [Route("search/{searchTerm}")]
+        public async Task<IActionResult> Search(string searchTerm)
+        {
+            var foundPosts = await postManager.SearchPostsAsync(searchTerm);
+
+            return Ok(foundPosts);
         }
 
         [AllowAnonymous]

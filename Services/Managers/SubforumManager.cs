@@ -74,6 +74,11 @@ namespace Services.Managers
             return await subforumService.GetSubforumsForDropdownAsync();
         }
 
+        public async Task<IEnumerable<SubforumSearchDto>> SearchSubforumsAsync(string searchTerm)
+        {
+            return await subforumService.SearchSubforumsAsync(searchTerm);
+        }
+
         public async Task<OperationResult<SubforumDetailsDto>> GetSubforumByNameAsync(string name, string? userId)
         {
             var operationResult = new OperationResult<SubforumDetailsDto>();
@@ -183,5 +188,7 @@ namespace Services.Managers
 
             return operationResult;
         }
+
+
     }
 }

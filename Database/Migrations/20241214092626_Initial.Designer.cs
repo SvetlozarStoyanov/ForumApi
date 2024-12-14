@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Database.Migrations
 {
     [DbContext(typeof(ForumDbContext))]
-    [Migration("20241211093138_Initial")]
+    [Migration("20241214092626_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -547,7 +547,7 @@ namespace Database.Migrations
                         .IsRequired();
 
                     b.HasOne("Database.Entities.Identity.ApplicationUser", "User")
-                        .WithMany()
+                        .WithMany("Comments")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -566,7 +566,7 @@ namespace Database.Migrations
                         .IsRequired();
 
                     b.HasOne("Database.Entities.Identity.ApplicationUser", "User")
-                        .WithMany()
+                        .WithMany("CommentReplies")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -585,7 +585,7 @@ namespace Database.Migrations
                         .IsRequired();
 
                     b.HasOne("Database.Entities.Identity.ApplicationUser", "User")
-                        .WithMany()
+                        .WithMany("Posts")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -751,6 +751,15 @@ namespace Database.Migrations
             modelBuilder.Entity("Database.Entities.Comments.CommentReply", b =>
                 {
                     b.Navigation("Votes");
+                });
+
+            modelBuilder.Entity("Database.Entities.Identity.ApplicationUser", b =>
+                {
+                    b.Navigation("CommentReplies");
+
+                    b.Navigation("Comments");
+
+                    b.Navigation("Posts");
                 });
 
             modelBuilder.Entity("Database.Entities.Posts.Post", b =>

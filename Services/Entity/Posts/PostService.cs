@@ -28,6 +28,106 @@ namespace Services.Entity.Posts
             this.unitOfWork = unitOfWork;
         }
 
+        public async Task<IEnumerable<PostListDto>> GetUserPostsForGuestUserAsync(string userId,
+            PostsQueryDto postsQueryDto)
+        {
+            var postsQuery = unitOfWork.PostRepository.FindByConditionAsNoTracking(x => x.UserId == userId);
+
+            switch (postsQueryDto.Order)
+            {
+                case PostOrdering.Newest:
+                    postsQuery = postsQuery.OrderByDescending(x => x.CreatedOn);
+                    break;
+                case PostOrdering.TopRated:
+                    postsQuery = postsQuery.OrderByDescending(x => x.Votes.Count(x => x.Type == PostVotes.Up) - x.Votes.Count(x => x.Type == PostVotes.Down));
+                    break;
+                case PostOrdering.Oldest:
+                    postsQuery = postsQuery.OrderBy(x => x.CreatedOn);
+                    break;
+            }
+
+            var posts = await postsQuery
+                .Skip((postsQueryDto.Page - 1) * 5)
+                .Take(5)
+                .Select(x => new PostListDto()
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Text = x.Text,
+                    VoteTally = x.Votes.Where(x => x.Type == PostVotes.Up).Count() - x.Votes.Where(x => x.Type == PostVotes.Down).Count(),
+                    CommentCount = x.Comments.Count + x.Comments.SelectMany(c => c.Replies).Count(),
+                    User = new UserMinInfoDto()
+                    {
+                        Id = x.UserId,
+                        Username = x.User.UserName!
+                    },
+                    Subforum = new SubforumMinInfoDto()
+                    {
+                        Id = x.SubforumId,
+                        Name = x.Subforum.Name
+                    },
+                })
+                .ToListAsync();
+
+            return posts;
+        }
+
+        public async Task<IEnumerable<PostListDto>> GetUserPostsAsync(string userId,
+            string currentUserId,
+            PostsQueryDto postsQueryDto)
+        {
+            var postsQuery = unitOfWork.PostRepository.FindByConditionAsNoTracking(x => x.UserId == userId);
+
+            switch (postsQueryDto.Order)
+            {
+                case PostOrdering.Newest:
+                    postsQuery = postsQuery.OrderByDescending(x => x.CreatedOn);
+                    break;
+                case PostOrdering.TopRated:
+                    postsQuery = postsQuery.OrderByDescending(x => x.Votes.Count(x => x.Type == PostVotes.Up) - x.Votes.Count(x => x.Type == PostVotes.Down));
+                    break;
+                case PostOrdering.Oldest:
+                    postsQuery = postsQuery.OrderBy(x => x.CreatedOn);
+                    break;
+            }
+
+            var posts = await postsQuery
+                .Skip((postsQueryDto.Page - 1) * 5)
+                .Take(5)
+                .Select(x => new PostListDto()
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Text = x.Text,
+                    VoteTally = x.Votes.Where(x => x.Type == PostVotes.Up).Count() - x.Votes.Where(x => x.Type == PostVotes.Down).Count(),
+                    CommentCount = x.Comments.Count + x.Comments.SelectMany(c => c.Replies).Count(),
+                    User = new UserMinInfoDto()
+                    {
+                        Id = x.UserId,
+                        Username = x.User.UserName!
+                    },
+                    Subforum = new SubforumMinInfoDto()
+                    {
+                        Id = x.SubforumId,
+                        Name = x.Subforum.Name
+                    },
+                    UserPermittedActions = new UserPermittedActionsDto()
+                    {
+                        CanEdit = x.UserId == userId,
+                        CanDelete = x.UserId == userId
+                    },
+                    UserVote = new UserVoteDto()
+                    {
+                        VoteType = x.Votes.Any(x => x.Type == PostVotes.Up && x.UserId == currentUserId) ? VoteTypes.Up :
+                                    x.Votes.Any(x => x.Type == PostVotes.Down && x.UserId == currentUserId) ? VoteTypes.Down
+                                    : VoteTypes.None
+                    }
+                })
+                .ToListAsync();
+
+            return posts;
+        }
+
         public async Task<IEnumerable<PostListDto>> GetHomePagePostsForGuestUserAsync(PostsQueryDto postsQueryDto)
         {
             var postsQuery = unitOfWork.PostRepository.AllAsNoTracking();
@@ -216,6 +316,24 @@ namespace Services.Entity.Posts
                         VoteType = x.Votes.Any(x => x.Type == PostVotes.Up && x.UserId == userId) ? VoteTypes.Up :
                                     x.Votes.Any(x => x.Type == PostVotes.Down && x.UserId == userId) ? VoteTypes.Down
                                     : VoteTypes.None
+                    }
+                })
+                .ToListAsync();
+
+            return posts;
+        }
+
+        public async Task<IEnumerable<PostSearchDto>> SearchPostsAsync(string searchTerm)
+        {
+            var posts = await unitOfWork.PostRepository.FindByConditionAsNoTracking(x => x.Title.ToLower().Contains(searchTerm.ToLower()))
+                .Select(x => new PostSearchDto()
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Subforum = new SubforumMinInfoDto()
+                    {
+                        Id = x.SubforumId,
+                        Name = x.Subforum.Name
                     }
                 })
                 .ToListAsync();

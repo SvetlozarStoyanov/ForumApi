@@ -145,6 +145,30 @@ namespace ForumApi.Controllers
             return Ok(operationResult.Data);
         }
 
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("search/{searchTerm}")]
+        public async Task<IActionResult> SearchUsers(string searchTerm)
+        {
+            var foundUsers = await userService.SearchUsersAsync(searchTerm);
+
+            return Ok(foundUsers);
+        }
+
+        [AllowAnonymous]
+        [HttpGet]
+        [Route("get-user-details/{username}")]
+        public async Task<IActionResult> GetUserDetails(string username)
+        {
+            var operationResult = await userService.GetUserDetailsAsync(username);
+            if (!operationResult.IsSuccessful)
+            {
+                return this.Error(operationResult);
+            }
+
+            return Ok(operationResult.Data);
+        }
+
         [HttpGet]
         [Route("auth-test")]
         public IActionResult AuthTest()

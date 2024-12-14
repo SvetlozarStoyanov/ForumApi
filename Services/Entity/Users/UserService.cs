@@ -47,9 +47,50 @@ namespace Services.Entity.ApplicationUsers
             return operationResult;
         }
 
+        public async Task<IEnumerable<UserSearchDto>> SearchUsersAsync(string searchTerm)
+        {
+            var users = await unitOfWork.UserRepository.FindByConditionAsNoTracking(x => x.UserName.ToLower().Contains(searchTerm.ToLower()))
+                .Select(x => new UserSearchDto()
+                {
+                    Id = x.Id,
+                    Username = x.UserName,
+                    PostCount = x.Posts.Count,
+                    CommentCount = x.Comments.Count
+                })
+                .ToListAsync();
+
+            return users;
+        }
+
+        public async Task<OperationResult<UserDetailsDto>> GetUserDetailsAsync(string userName)
+        {
+            var operationResult = new OperationResult<UserDetailsDto>();
+
+            var userDto = await unitOfWork.UserRepository.FindByConditionAsNoTracking(x => x.UserName == userName)
+                .Select(x => new UserDetailsDto()
+                {
+                    Id = x.Id,
+                    Username = x.UserName,
+                    PostCount = x.Posts.Count(),
+                    CommentCount = x.Comments.Count + x.CommentReplies.Count
+                })
+                .FirstOrDefaultAsync();
+
+            if (userDto is null)
+            {
+                operationResult.AddError(new Error(ErrorTypes.NotFound, $"User with username: {userName} was not found!"));
+                return operationResult;
+            }
+
+            operationResult.Data = userDto;
+
+            return operationResult;
+        }
+
         public async Task<bool> IsUserNameTakenAsync(string userName)
         {
             return await unitOfWork.UserRepository.AllAsNoTracking().AnyAsync(u => u.NormalizedUserName == userName.ToUpper());
         }
+
     }
 }

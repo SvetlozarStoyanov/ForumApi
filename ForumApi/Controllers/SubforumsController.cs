@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Models.DTOs.Posts.Output;
 using Models.DTOs.Subforums.Input;
+using Services.Managers;
 
 namespace ForumApi.Controllers
 {
@@ -74,6 +75,16 @@ namespace ForumApi.Controllers
             var subforums = await subforumManager.GetSubforumsForDropdownAsync();
 
             return Ok(subforums);
+        }
+
+        [AllowAnonymous]
+        [HttpGet()]
+        [Route("search/{searchTerm}")]
+        public async Task<IActionResult> Search(string searchTerm)
+        {
+            var foundSubforums = await subforumManager.SearchSubforumsAsync(searchTerm);
+
+            return Ok(foundSubforums);
         }
 
         [AllowAnonymous]
