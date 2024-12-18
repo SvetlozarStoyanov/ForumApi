@@ -12,6 +12,7 @@ namespace Models.DTOs.Posts.Output
         public string Text { get; set; }
         public int VoteTally { get; set; }
         public int CommentCount { get; set; }
+        public DateTime CreatedOn { get; set; }
         public UserMinInfoDto User { get; set; }
         public SubforumMinInfoDto Subforum { get; set; }
         public UserPermittedActionsDto UserPermittedActions { get; set; }

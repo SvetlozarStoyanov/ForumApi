@@ -9,6 +9,7 @@ namespace Models.DTOs.CommentReplies.Output
         public long Id { get; set; }
         public string Text { get; set; }
         public int VoteTally { get; set; }
+        public DateTime CreatedOn { get; set; }
         public UserMinInfoDto User { get; set; }
         public UserPermittedActionsDto UserPermittedActions { get; set; }
         public UserVoteDto? UserVote { get; set; }

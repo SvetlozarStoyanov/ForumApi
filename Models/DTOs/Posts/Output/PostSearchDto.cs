@@ -6,6 +6,7 @@ namespace Models.DTOs.Posts.Output
     {
         public long Id { get; set; }
         public string Title { get; set; }
+        public DateTime CreatedOn { get; set; }
         public SubforumMinInfoDto Subforum { get; set; }
     }
 }
