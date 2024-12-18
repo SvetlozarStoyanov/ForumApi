@@ -35,6 +35,7 @@ namespace Services.Entity.Comments
                 {
                     Id = x.Id,
                     Text = x.Text,
+                    CreatedOn = x.CreatedOn,
                     User = new UserMinInfoDto()
                     {
                         Id = x.UserId,
@@ -45,6 +46,7 @@ namespace Services.Entity.Comments
                     {
                         Id = z.Id,
                         Text = z.Text,
+                        CreatedOn = x.CreatedOn,
                         VoteTally = z.Votes.Count(x => x.Type == CommentReplyVotes.Up) - z.Votes.Count(x => x.Type == CommentReplyVotes.Down),
                         User = new UserMinInfoDto()
                         {
@@ -66,6 +68,7 @@ namespace Services.Entity.Comments
                 {
                     Id = x.Id,
                     Text = x.Text,
+                    CreatedOn = x.CreatedOn,
                     User = new UserMinInfoDto()
                     {
                         Id = x.UserId,
@@ -76,6 +79,7 @@ namespace Services.Entity.Comments
                     {
                         Id = z.Id,
                         Text = z.Text,
+                        CreatedOn = x.CreatedOn,
                         VoteTally = z.Votes.Count(x => x.Type == CommentReplyVotes.Up) - z.Votes.Count(x => x.Type == CommentReplyVotes.Down),
                         User = new UserMinInfoDto()
                         {

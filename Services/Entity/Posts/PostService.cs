@@ -54,6 +54,7 @@ namespace Services.Entity.Posts
                     Id = x.Id,
                     Title = x.Title,
                     Text = x.Text,
+                    CreatedOn = x.CreatedOn,
                     VoteTally = x.Votes.Where(x => x.Type == PostVotes.Up).Count() - x.Votes.Where(x => x.Type == PostVotes.Down).Count(),
                     CommentCount = x.Comments.Count + x.Comments.SelectMany(c => c.Replies).Count(),
                     User = new UserMinInfoDto()
@@ -99,6 +100,7 @@ namespace Services.Entity.Posts
                     Id = x.Id,
                     Title = x.Title,
                     Text = x.Text,
+                    CreatedOn = x.CreatedOn,
                     VoteTally = x.Votes.Where(x => x.Type == PostVotes.Up).Count() - x.Votes.Where(x => x.Type == PostVotes.Down).Count(),
                     CommentCount = x.Comments.Count + x.Comments.SelectMany(c => c.Replies).Count(),
                     User = new UserMinInfoDto()
@@ -153,6 +155,7 @@ namespace Services.Entity.Posts
                     Id = x.Id,
                     Title = x.Title,
                     Text = x.Text,
+                    CreatedOn = x.CreatedOn,
                     VoteTally = x.Votes.Where(x => x.Type == PostVotes.Up).Count() - x.Votes.Where(x => x.Type == PostVotes.Down).Count(),
                     CommentCount = x.Comments.Count + x.Comments.SelectMany(c => c.Replies).Count(),
                     User = new UserMinInfoDto()
@@ -196,6 +199,7 @@ namespace Services.Entity.Posts
                     Id = x.Id,
                     Title = x.Title,
                     Text = x.Text,
+                    CreatedOn = x.CreatedOn,
                     VoteTally = x.Votes.Where(x => x.Type == PostVotes.Up).Count() - x.Votes.Where(x => x.Type == PostVotes.Down).Count(),
                     CommentCount = x.Comments.Count + x.Comments.SelectMany(c => c.Replies).Count(),
                     User = new UserMinInfoDto()
@@ -218,7 +222,7 @@ namespace Services.Entity.Posts
                         VoteType = x.Votes.Any(x => x.Type == PostVotes.Up && x.UserId == userId) ? VoteTypes.Up :
                                     x.Votes.Any(x => x.Type == PostVotes.Down && x.UserId == userId) ? VoteTypes.Down
                                     : VoteTypes.None
-                    }
+                    },
                 })
                 .ToListAsync();
 
@@ -250,6 +254,7 @@ namespace Services.Entity.Posts
                     Id = x.Id,
                     Title = x.Title,
                     Text = x.Text,
+                    CreatedOn = x.CreatedOn,
                     VoteTally = x.Votes.Where(x => x.Type == PostVotes.Up).Count() - x.Votes.Where(x => x.Type == PostVotes.Down).Count(),
                     CommentCount = x.Comments.Count + x.Comments.SelectMany(c => c.Replies).Count(),
                     User = new UserMinInfoDto()
@@ -262,7 +267,6 @@ namespace Services.Entity.Posts
                         Id = x.SubforumId,
                         Name = x.Subforum.Name
                     },
-
                 })
                 .ToListAsync();
 
@@ -294,6 +298,7 @@ namespace Services.Entity.Posts
                     Id = x.Id,
                     Title = x.Title,
                     Text = x.Text,
+                    CreatedOn = x.CreatedOn,
                     VoteTally = x.Votes.Where(x => x.Type == PostVotes.Up).Count() - x.Votes.Where(x => x.Type == PostVotes.Down).Count(),
                     CommentCount = x.Comments.Count + x.Comments.SelectMany(c => c.Replies).Count(),
                     User = new UserMinInfoDto()
@@ -330,6 +335,7 @@ namespace Services.Entity.Posts
                 {
                     Id = x.Id,
                     Title = x.Title,
+                    CreatedOn = x.CreatedOn,
                     Subforum = new SubforumMinInfoDto()
                     {
                         Id = x.SubforumId,
@@ -352,6 +358,7 @@ namespace Services.Entity.Posts
                         Id = x.Id,
                         Title = x.Title,
                         Text = x.Text,
+                        CreatedOn = x.CreatedOn,
                         VoteTally = x.Votes.Count(x => x.Type == PostVotes.Up) - x.Votes.Count(x => x.Type == PostVotes.Down),
                         CommentCount = x.Comments.Count + x.Comments.SelectMany(c => c.Replies).Count(),
                         User = new UserMinInfoDto()
@@ -390,6 +397,7 @@ namespace Services.Entity.Posts
                         Id = x.Id,
                         Title = x.Title,
                         Text = x.Text,
+                        CreatedOn = x.CreatedOn,
                         VoteTally = x.Votes.Count(x => x.Type == PostVotes.Up) - x.Votes.Count(x => x.Type == PostVotes.Down),
                         CommentCount = x.Comments.Count + x.Comments.SelectMany(c => c.Replies).Count(),
                         User = new UserMinInfoDto()
