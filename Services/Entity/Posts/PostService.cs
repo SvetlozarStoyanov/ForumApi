@@ -57,11 +57,6 @@ namespace Services.Entity.Posts
                     CreatedOn = x.CreatedOn,
                     VoteTally = x.Votes.Where(x => x.Type == PostVotes.Up).Count() - x.Votes.Where(x => x.Type == PostVotes.Down).Count(),
                     CommentCount = x.Comments.Count + x.Comments.SelectMany(c => c.Replies).Count(),
-                    User = new UserMinInfoDto()
-                    {
-                        Id = x.UserId,
-                        Username = x.User.UserName!
-                    },
                     Subforum = new SubforumMinInfoDto()
                     {
                         Id = x.SubforumId,
@@ -103,11 +98,6 @@ namespace Services.Entity.Posts
                     CreatedOn = x.CreatedOn,
                     VoteTally = x.Votes.Where(x => x.Type == PostVotes.Up).Count() - x.Votes.Where(x => x.Type == PostVotes.Down).Count(),
                     CommentCount = x.Comments.Count + x.Comments.SelectMany(c => c.Replies).Count(),
-                    User = new UserMinInfoDto()
-                    {
-                        Id = x.UserId,
-                        Username = x.User.UserName!
-                    },
                     Subforum = new SubforumMinInfoDto()
                     {
                         Id = x.SubforumId,
@@ -262,11 +252,6 @@ namespace Services.Entity.Posts
                         Id = x.UserId,
                         Username = x.User.UserName!
                     },
-                    Subforum = new SubforumMinInfoDto()
-                    {
-                        Id = x.SubforumId,
-                        Name = x.Subforum.Name
-                    },
                 })
                 .ToListAsync();
 
@@ -305,11 +290,6 @@ namespace Services.Entity.Posts
                     {
                         Id = x.UserId,
                         Username = x.User.UserName!
-                    },
-                    Subforum = new SubforumMinInfoDto()
-                    {
-                        Id = x.SubforumId,
-                        Name = x.Subforum.Name
                     },
                     UserPermittedActions = new UserPermittedActionsDto()
                     {
