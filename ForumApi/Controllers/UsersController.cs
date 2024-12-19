@@ -110,10 +110,12 @@ namespace ForumApi.Controllers
             return Ok(new { Id = user.Id, Username = user.UserName });
         }
 
+        [AllowAnonymous]
         [HttpPost]
         [Route("logout")]
         public async Task<IActionResult> Logout()
         {
+            
             if (Request.Cookies["jwt"] != null)
             {
                 Response.Cookies.Delete("jwt");
